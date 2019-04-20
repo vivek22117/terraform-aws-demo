@@ -7,14 +7,19 @@ variable "profile" {
 variable "environment" {
   type        = "string"
   description = "Environmet to be used"
-  default     = "dev"
 }
 
 //Default Variables
-variable "s3_bucket_prefix" {
+variable "cidr_block" {
   type        = "string"
-  default     = "doubledigit-tfstate"
-  description = "Prefix for s3 bucket"
+  default     = "10.0.0.0/20"
+  description = "Cidr range for VPC"
+}
+
+variable "owner" {
+  type        = "string"
+  description = "Owner of the product"
+  default     = "Vivek"
 }
 
 variable "default_region" {
@@ -24,7 +29,7 @@ variable "default_region" {
 
 variable "available_zones" {
   type        = "list"
-  default     = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e"]
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
   description = "Name of regions to be used for infrastructure"
 }
 

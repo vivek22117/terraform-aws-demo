@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket  = "doubledigit-tfstate-dev-us-east-1"
-    key     = "dev/aws"
+    key     = "dev/vpc"
     region  = "us-east-1"
     encrypt = "true"
   }
