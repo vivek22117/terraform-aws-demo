@@ -7,25 +7,29 @@ variable "profile" {
 variable "environment" {
   type        = "string"
   description = "Environmet to be used"
-  default     = "dev"
+}
+
+variable "cidr_block" {
+  type = "string"
+  description = "Cidr range for vpc"
 }
 
 //Default Variables
-variable "s3_bucket_prefix" {
+variable "owner" {
   type        = "string"
-  default     = "doubledigit-tfstate"
-  description = "Prefix for s3 bucket"
-}
-
-variable "dyanamoDB_prefix" {
-  type        = "string"
-  default     = "doubledigit-tfstate"
-  description = "Pefix for dynamoDB Table"
+  description = "Owner of the product"
+  default     = "Vivek"
 }
 
 variable "default_region" {
   type    = "string"
   default = "us-east-1"
+}
+
+variable "available_zones" {
+  type        = "list"
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  description = "Name of regions to be used for infrastructure"
 }
 
 //Local variables

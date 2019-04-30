@@ -6,16 +6,15 @@ variable "profile" {
 
 variable "environment" {
   type        = "string"
-  description = "Environmet to be used"
+  description = "Environmets to be used"
+}
+
+variable "cidr_block" {
+  type        = "string"
+  description = "Cidr range for vpc"
 }
 
 //Default Variables
-variable "cidr_block" {
-  type        = "string"
-  default     = "10.0.0.0/20"
-  description = "Cidr range for VPC"
-}
-
 variable "owner" {
   type        = "string"
   description = "Owner of the product"

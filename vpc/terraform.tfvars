@@ -1,2 +1,0 @@
-profile = "doubledigit"
-environment = "dev"
