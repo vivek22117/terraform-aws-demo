@@ -21,6 +21,12 @@ variable "owner" {
   default     = "Vivek"
 }
 
+variable "s3_bucket_prefix" {
+  type        = "string"
+  default     = "doubledigit-tfstate"
+  description = "Prefix for s3 bucket"
+}
+
 variable "default_region" {
   type    = "string"
   default = "us-east-1"

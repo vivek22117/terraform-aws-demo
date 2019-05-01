@@ -50,3 +50,44 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
     Name = "DynamoDb Terraform state lock Table"
   }
 }
+
+resource "aws_iam_policy" "terraform_access_policy" {
+  name = "terraform-access-policy"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*"
+      }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role" "terraform_access_role" {
+  name = "terraform-access-role"
+  path = "/"
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "terraform_access" {
+  policy_arn = "${aws_iam_policy.terraform_access_policy.arn}"
+  role = "${aws_iam_role.terraform_access_role.name}"
+}
