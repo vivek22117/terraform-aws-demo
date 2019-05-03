@@ -10,7 +10,6 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = "${merge(local.common_tags, map("Name", "PublicSubnet-${element(var.available_zones, count.index)}"))}"
-
 }
 
 ######################################################
@@ -24,8 +23,7 @@ resource "aws_subnet" "private" {
   availability_zone       = "${element(var.available_zones,count.index)}"
   map_public_ip_on_launch = false
 
-  tags ="${merge(local.common_tags, map("Name", "PrivateSubnet-${element(var.available_zones, count.index)}"))}"
-
+  tags = "${merge(local.common_tags, map("Name", "PrivateSubnet-${element(var.available_zones, count.index)}"))}"
 }
 
 ######################################################

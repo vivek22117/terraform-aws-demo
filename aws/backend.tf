@@ -32,15 +32,16 @@ resource "aws_s3_bucket" "main" {
 }
 
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
+  name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
+  read_capacity  = 5
+  write_capacity = 5
+
+  hash_key = "LockID"
+
   "attribute" {
     name = "LockID"
     type = "S"
   }
-
-  hash_key       = "LockID"
-  name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
-  read_capacity  = 5
-  write_capacity = 5
 
   lifecycle {
     prevent_destroy = true
@@ -53,6 +54,7 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
 
 resource "aws_iam_policy" "terraform_access_policy" {
   name = "terraform-access-policy"
+
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -70,6 +72,7 @@ EOF
 resource "aws_iam_role" "terraform_access_role" {
   name = "terraform-access-role"
   path = "/"
+
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -89,5 +92,5 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "terraform_access" {
   policy_arn = "${aws_iam_policy.terraform_access_policy.arn}"
-  role = "${aws_iam_role.terraform_access_role.name}"
+  role       = "${aws_iam_role.terraform_access_role.name}"
 }

@@ -3,5 +3,5 @@ module "vpc_one" {
 
   profile     = "${var.profile}"
   environment = "${var.default_region}"
-  cidr_block = "${var.cidr_block}"
+  cidr_block  = "${var.cidr_block}"
 }
