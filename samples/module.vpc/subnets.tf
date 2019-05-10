@@ -4,12 +4,13 @@
 ######################################################
 resource "aws_subnet" "public" {
   count                   = "${length(var.available_zones)}"
+
   cidr_block              = "10.0.${count.index * 2 +1}.0/24"
   vpc_id                  = "${aws_vpc.dev_vpc.id}"
   availability_zone       = "${element(var.available_zones, count.index)}"
   map_public_ip_on_launch = true
 
-  tags = "${merge(local.common_tags, map("Name", "PublicSubnet-${element(var.available_zones, count.index)}"))}"
+  tags = "${merge(local.common_tags, map("Name", "PublicSubnet-${var.environment}-${element(var.available_zones, count.index)}"))}"
 }
 
 ######################################################
@@ -18,12 +19,13 @@ resource "aws_subnet" "public" {
 ######################################################
 resource "aws_subnet" "private" {
   count                   = "${length(var.available_zones)}"
+
   cidr_block              = "10.0.${count.index * 2}.0/24"
   vpc_id                  = "${aws_vpc.dev_vpc.id}"
   availability_zone       = "${element(var.available_zones,count.index)}"
   map_public_ip_on_launch = false
 
-  tags = "${merge(local.common_tags, map("Name", "PrivateSubnet-${element(var.available_zones, count.index)}"))}"
+  tags = "${merge(local.common_tags, map("Name", "PrivateSubnet-${var.environment}-${element(var.available_zones, count.index)}"))}"
 }
 
 ######################################################
@@ -38,7 +40,7 @@ resource "aws_eip" "nat_eip" {
   vpc = true
 
   tags {
-    Name = "EIP_${aws_vpc.dev_vpc.id}"
+    Name = "EIP_${var.environment}_${aws_vpc.dev_vpc.id}"
   }
 }
 
@@ -48,6 +50,6 @@ resource "aws_nat_gateway" "nat_gateway" {
   subnet_id     = "${element(aws_subnet.public.*.id, 0)}"
 
   tags {
-    Name = "NAT_${aws_vpc.dev_vpc.id}"
+    Name = "NAT_${var.environment}_${aws_vpc.dev_vpc.id}"
   }
 }

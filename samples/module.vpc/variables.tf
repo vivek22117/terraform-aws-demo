@@ -6,7 +6,7 @@ variable "profile" {
 
 variable "environment" {
   type        = "string"
-  description = "Environmets to be used"
+  description = "Environmet to be used"
 }
 
 variable "cidr_block" {
@@ -14,13 +14,22 @@ variable "cidr_block" {
   description = "Cidr range for vpc"
 }
 
-//Default Variables
+variable "available_zones" {
+  type        = "list"
+  description = "Name of regions to be used for infrastructure"
+}
+
+variable "team" {
+  type    = "string"
+  description = "Owner team for this applcation infrastructure"
+}
+
 variable "owner" {
   type        = "string"
   description = "Owner of the product"
-  default     = "Vivek"
 }
 
+//Default Variables
 variable "s3_bucket_prefix" {
   type        = "string"
   default     = "doubledigit-tfstate"
@@ -32,17 +41,11 @@ variable "default_region" {
   default = "us-east-1"
 }
 
-variable "available_zones" {
-  type        = "list"
-  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  description = "Name of regions to be used for infrastructure"
-}
-
 //Local variables
 locals {
   common_tags = {
-    owner       = "Vivek"
-    team        = "TeamConcept"
+    owner       = "${var.owner}"
+    team        = "${var.team}"
     environment = "${var.environment}"
   }
 }

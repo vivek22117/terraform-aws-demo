@@ -11,7 +11,7 @@ resource "aws_route_table" "public" {
   }
 
   tags {
-    Name  = "Public_route_${aws_vpc.dev_vpc.id}"
+    Name  = "Public_route_${var.environment}_${aws_vpc.dev_vpc.id}"
     owner = "${var.owner}"
   }
 }
@@ -30,7 +30,7 @@ resource "aws_route_table" "private" {
   }
 
   tags {
-    Name  = "Private_route_${aws_vpc.dev_vpc.id}"
+    Name  = "Private_route_${var.environment}_${aws_vpc.dev_vpc.id}"
     owner = "${var.owner}"
   }
 }
