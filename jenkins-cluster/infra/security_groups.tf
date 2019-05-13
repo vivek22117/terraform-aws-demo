@@ -57,12 +57,12 @@ resource "aws_security_group_rule" "allow_ssh_traffic_for_slaves" {
 }
 
 resource "aws_security_group_rule" "allow_ssh_traffic_from_bastion" {
-  type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  security_group_id        = "${aws_security_group.jenkins_slaves_sg.id}"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = "${aws_security_group.jenkins_slaves_sg.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "allow_outbound_traffic" {

@@ -62,7 +62,7 @@ resource "aws_elb" "jenkins_elb" {
   security_groups           = ["${aws_security_group.lb_sg.id}"]
   internal                  = false
 
-/*  listener {
+  /*  listener {
     instance_port     = 8080
     instance_protocol = "http"
     lb_port           = 443
@@ -75,7 +75,6 @@ resource "aws_elb" "jenkins_elb" {
     lb_port           = 80
     lb_protocol       = "http"
   }
-
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
@@ -83,7 +82,6 @@ resource "aws_elb" "jenkins_elb" {
     target              = "TCP:8080"
     interval            = 5
   }
-
   tags {
     Name        = "jenkins_elb"
     Author      = "vivek"
