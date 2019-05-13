@@ -1,3 +1,4 @@
+/*
 resource "aws_iam_instance_profile" "jenkins_profile" {
   name = "JenkinsSlavesAccessProfile"
   role = "${aws_iam_role.role.name}"
@@ -41,3 +42,4 @@ resource "aws_iam_role_policy" "jenkins_access_policy" {
 }
 EOF
 }
+*/

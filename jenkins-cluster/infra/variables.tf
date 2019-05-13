@@ -5,7 +5,7 @@ variable "profile" {
 }
 
 variable "public_key" {
-  type = "string"
+  type        = "string"
   description = "public key to create key pair for Jenkins Slaves"
 }
 
@@ -15,8 +15,20 @@ variable "environment" {
 }
 
 variable "bastion_sg_id" {
-  type = "string"
+  type        = "string"
   description = "Bastion Host security id"
+}
+
+variable "jenkins_username" {
+  description = "Jenkins username"
+}
+
+variable "jenkins_password" {
+  description = "Jenkins password"
+}
+
+variable "jenkins_credentials_id" {
+  description = "Slaves SSH ID"
 }
 
 //Default Variables
@@ -34,7 +46,6 @@ variable "s3_bucket_prefix" {
   type    = "string"
   default = "teamconcept-tfstate"
 }
-
 
 //Local variables
 locals {
