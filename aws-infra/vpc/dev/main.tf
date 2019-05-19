@@ -1,7 +1,5 @@
-
-
 module "vpc-dev" {
-  source = "../../../samples/module.vpc"
+  source = "../../../modules/module.vpc"
 
   profile     = "${var.profile}"
   environment = "${var.environment}"
@@ -11,6 +9,9 @@ module "vpc-dev" {
 
   team  = "${var.team}"
   owner = "${var.owner}"
+
+  bastion_instance = "${var.bastion_instance}"
+  public_key = "${var.public_key}"
 }
 
 data "terraform_remote_state" "s3" {

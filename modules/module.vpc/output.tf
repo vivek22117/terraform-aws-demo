@@ -17,3 +17,7 @@ output "private_subnets" {
 output "private_cirds" {
   value = "${aws_subnet.private.*.cidr_block}"
 }
+
+output "bastion_sg_id" {
+  value = "${aws_security_group.bastion_host_sg.id}"
+}

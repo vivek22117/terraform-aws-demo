@@ -3,9 +3,10 @@
 JENKINS_URL="${jenkins_url}"
 JENKINS_USERNAME="${jenkins_username}"
 JENKINS_PASSWORD="${jenkins_password}"
+ENVIRONMENT = "${environment}"
 TOKEN=$(curl -u $JENKINS_USERNAME:$JENKINS_PASSWORD ''$JENKINS_URL'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
 INSTANCE_HOST=$(curl -s 169.254.169.254/latest/meta-data/local-hostname)
-INSTANCE_NAME = "$INSTANCE_HOST_${environment}"
+INSTANCE_NAME = "'$INSTANCE_HOST'-'$ENVIRONMENT'"
 INSTANCE_IP=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
 JENKINS_CREDENTIALS_ID="${jenkins_credentials_id}"
 
@@ -17,7 +18,7 @@ import hudson.slaves.*
 import jenkins.model.Jenkins
 import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy
 import hudson.plugins.sshslaves.SSHLauncher
-DumbSlave dumb = new DumbSlave("'$INSTANCE_NAME'",
+DumbSlave dumb = new DumbSlave("'$INSTANCE_HOST'",
 "'$INSTANCE_HOST'",
 "/home/ec2-user",
 "2",

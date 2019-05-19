@@ -14,11 +14,6 @@ variable "environment" {
   description = "AWS Profile name for credentials"
 }
 
-variable "bastion_sg_id" {
-  type        = "string"
-  description = "Bastion Host security id"
-}
-
 variable "jenkins_username" {
   description = "Jenkins username"
 }

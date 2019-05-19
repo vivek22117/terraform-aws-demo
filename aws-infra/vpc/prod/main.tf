@@ -1,5 +1,5 @@
 module "vpc-dev" {
-  source = "../../../samples/module.vpc"
+  source = "../../../modules/module.vpc"
 
   profile     = "${var.profile}"
   environment = "${var.environment}"

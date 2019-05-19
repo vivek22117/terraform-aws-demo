@@ -9,3 +9,7 @@ output "private_subnets" {
 output "public_subnets" {
   value = "${module.vpc-dev.public_subnets}"
 }
+
+output "bastion_sg" {
+  value = "${module.vpc-dev.bastion_sg_id}"
+}

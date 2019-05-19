@@ -2,7 +2,7 @@
 
 
 module "vpc-dev" {
-  source = "../../samples/module.vpc"
+  source = "..\/..\/modules/module.vpc"
 
   profile     = "${var.profile == "dev" ? 1 : 5}"
   environment = "${terraform.workspace}"

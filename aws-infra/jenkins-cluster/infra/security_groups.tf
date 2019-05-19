@@ -26,7 +26,7 @@ resource "aws_security_group_rule" "allow_ssh_traffic" {
   to_port           = 22
   protocol          = "tcp"
   security_group_id = "${aws_security_group.jenkins_master_sg.id}"
-  cidr_blocks       = ["0.0.0.0/0"]
+  source_security_group_id = "${data.terraform_remote_state.vpc.bastion_sg}"
 }
 
 resource "aws_security_group_rule" "master_outbound_rule" {
@@ -62,7 +62,7 @@ resource "aws_security_group_rule" "allow_ssh_traffic_from_bastion" {
   to_port           = 22
   protocol          = "tcp"
   security_group_id = "${aws_security_group.jenkins_slaves_sg.id}"
-  cidr_blocks       = ["0.0.0.0/0"]
+  source_security_group_id = "${data.terraform_remote_state.vpc.bastion_sg}"
 }
 
 resource "aws_security_group_rule" "allow_outbound_traffic" {
