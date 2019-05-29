@@ -1,0 +1,6 @@
+sms-reminder-lambda = ""
+email-reminder-lambda = ""
+step-function-name = ""
+environment = ""
+memory-size = ""
+time-out = ""

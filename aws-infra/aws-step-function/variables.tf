@@ -34,6 +34,16 @@ variable "default_region" {
   default = "us-east-1"
 }
 
+variable "s3_bucket_prefix" {
+  type    = "string"
+  default = "teamconcept-tfstate"
+}
+
+variable "sms-lambda-bucket-key" {
+  type = "string"
+  default = "lambda/sms-reminder-lambda.zip"
+}
+
 
 //Local variables
 locals {

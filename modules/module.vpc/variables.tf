@@ -41,6 +41,12 @@ variable "s3_bucket_prefix" {
   description = "Prefix for s3 bucket"
 }
 
+variable "artifactory_bucket_prefix" {
+  type = "string"
+  description = "Prefind for Artifactory Bucket"
+  default = "doubledigit-deploy"
+}
+
 variable "default_region" {
   type    = "string"
   default = "us-east-1"

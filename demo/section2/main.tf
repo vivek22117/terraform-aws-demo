@@ -31,6 +31,7 @@ resource "aws_s3_bucket" "s3" {
 
   tags   = "${local.common_tags}"
 }
+
 resource "aws_dynamodb_table" "teamconcept-tf-state-lock" {
   name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
   read_capacity  = 5

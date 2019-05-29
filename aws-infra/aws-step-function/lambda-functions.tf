@@ -16,9 +16,24 @@ resource "aws_lambda_function" "email_reminder" {
 
 
 //Lambda function for SMS Notification
+# adding the lambda archive to the defined bucket
+resource "aws_s3_bucket_object" "lambda-package" {
+  bucket = "${data.terraform_remote_state.vpc.s3_bucket_name}"
+  key    = "${var.sms-lambda-bucket-key}"
+  source = "${file("lambda-function/sms-reminder-lambda.zip")}"
+  server_side_encryption = "AES256"
+}
+
 resource "aws_lambda_function" "sms_reminder" {
   function_name = "${var.sms-reminder-lambda}"
-  handler = ""
-  role = ""
-  runtime = ""
+  handler = "sms-reminder-lambda.lambda_handler"
+
+  s3_bucket = "${aws_s3_bucket_object.lambda-package.bucket}"
+  s3_key = "${aws_s3_bucket_object.lambda-package.key}"
+
+  role = "${aws_iam_role.lambda_access_role.arn}"
+  runtime = "python3.7"
+  timeout = "${var.time-out}"
+
+  tags = "${local.common_tags}"
 }
