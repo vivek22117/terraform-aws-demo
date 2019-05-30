@@ -14,10 +14,10 @@ output "bastion_sg" {
   value = "${module.vpc-dev.bastion_sg_id}"
 }
 
-output "s3_bucket_name" {
+output "deploy_bucket_name" {
   value = "${module.vpc-dev.s3_deploy_bucket}"
 }
 
-output "s3_bucket_arn" {
+output "deploy_bucket_arn" {
   value = "${module.vpc-dev.s3_deploy_arn}"
 }

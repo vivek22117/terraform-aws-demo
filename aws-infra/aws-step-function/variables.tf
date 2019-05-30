@@ -1,3 +1,9 @@
+//Global Variables
+variable "profile" {
+  type        = "string"
+  description = "AWS Profile name for credentials"
+}
+
 variable "step-function-name" {
   type = "string"
   description = "Name of the step function"

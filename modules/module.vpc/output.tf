@@ -22,10 +22,3 @@ output "bastion_sg_id" {
   value = "${aws_security_group.bastion_host_sg.id}"
 }
 
-output "s3_deploy_bucket" {
-  value = "${aws_s3_bucket.s3_deploy_bucket.id}"
-}
-
-output "s3_deploy_arn" {
-  value = "${aws_s3_bucket.s3_deploy_bucket.arn}"
-}

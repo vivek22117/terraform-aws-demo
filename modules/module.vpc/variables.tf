@@ -37,14 +37,14 @@ variable "bastion_instance" {
 //Default Variables
 variable "s3_bucket_prefix" {
   type        = "string"
-  default     = "doubledigit-tfstate"
+  default     = "teamconcept-tfstate"
   description = "Prefix for s3 bucket"
 }
 
 variable "artifactory_bucket_prefix" {
   type = "string"
   description = "Prefind for Artifactory Bucket"
-  default = "doubledigit-deploy"
+  default = "teamconcept-deploy"
 }
 
 variable "default_region" {
@@ -56,26 +56,6 @@ variable "public_key" {
   type = "string"
   description = "key pair value"
   default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDV3fznjm92/s10goG0YotNIjq66CTDyf5a6wVVQUDYIF4OziH9G81NNc9sQiTlfNFy8RO4kSB0n5+w9nt90gs7nSZoBAATK6T0YNHll/A6ISUv4hgwooa6XUYxFgg+ceZ8Mvxc36wx78wTieVc7RTbx74Wr8AtavSJMC8wVb8QkUGMpumH7TNPP356MYEEgYciRLE8sLnkRYOvVekL3iU8p1tS5Pny5mqR1hinbQoE7WNuDsBxgV6Xn9kRQ9Rn5seIyY55tc1HPd2fwkafidWVX3hUD8RwOfSYvAwPc7AmVLCbUCktSZ8S1FEV9dSVncd8ji1tguoHh/OquXzNckqJ vivek@LAPTOP-FLDAPLLM"
-}
-
-variable "instance_tenancy" {
-  description = "A tenancy option for instances launched into the VPC"
-  default     = "default"
-}
-
-variable "enable_dns_hostnames" {
-  description = "A boolean flag to enable/disable DNS hostnames in the VPC"
-  default     = "true"
-}
-
-variable "enable_dns_support" {
-  description = "A boolean flag to enable/disable DNS support in the VPC"
-  default     = "true"
-}
-
-variable "enable_classiclink" {
-  description = "A boolean flag to enable/disable ClassicLink for the VPC"
-  default     = "false"
 }
 
 //Local variables

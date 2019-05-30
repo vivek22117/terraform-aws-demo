@@ -44,8 +44,8 @@ resource "aws_s3_bucket" "s3_deploy_bucket" {
 
   lifecycle_rule {
     enabled = true
-    id      = "state"
-    prefix  = "state/"
+    id      = "deploy"
+    prefix  = "deploy/"
 
     noncurrent_version_expiration {
       days = 1

@@ -9,8 +9,8 @@ terraform {
 
   backend "s3" {
     profile        = "doubledigit"
-    bucket         = "doubledigit-tfstate-dev-us-east-1"
-    dynamodb_table = "doubledigit-tfstate-dev-us-east-1"
+    bucket         = "teamconcept-tfstate-dev-us-east-1"
+    dynamodb_table = "teamconcept-tfstate-dev-us-east-1"
     key            = "state/dev/aws/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = "true"

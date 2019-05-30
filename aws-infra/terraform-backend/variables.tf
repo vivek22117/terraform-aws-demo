@@ -13,13 +13,13 @@ variable "environment" {
 //Default Variables
 variable "s3_bucket_prefix" {
   type        = "string"
-  default     = "doubledigit-tfstate"
+  default     = "teamconcept-tfstate"
   description = "Prefix for s3 bucket"
 }
 
 variable "dyanamoDB_prefix" {
   type        = "string"
-  default     = "doubledigit-tfstate"
+  default     = "teamconcept-tfstate"
   description = "Pefix for dynamoDB Table"
 }
 

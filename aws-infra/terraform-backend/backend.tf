@@ -53,14 +53,14 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
 }
 
 resource "aws_iam_policy" "terraform_access_policy" {
-  name = "terraform-access-policy"
+  name = "TerraformAccessPolicy"
 
   policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
       {
-        "Effect": "Deny",
+        "Effect": "Allow",
         "Action": "*",
         "Resource": "*"
       }
@@ -70,7 +70,7 @@ EOF
 }
 
 resource "aws_iam_role" "terraform_access_role" {
-  name = "terraform-access-role"
+  name = "TerraformAccessRole"
   path = "/"
 
   assume_role_policy = <<EOF
