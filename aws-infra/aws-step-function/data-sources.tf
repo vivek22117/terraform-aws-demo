@@ -12,6 +12,15 @@ data "archive_file" "lambda_for_sms" {
   type = "zip"
 }
 
+//Read S3 Bucket JSON Policy document
+data "template_file" "bucket_policy" {
+  template = "${file("scripts/bucket-policy.json")}"
+
+  vars {
+    bucket = "${aws_s3_bucket.website_bucket.id}"
+  }
+}
+
 //Remote state to fetch s3 deploy bucket
 data "terraform_remote_state" "vpc" {
   backend = "s3"

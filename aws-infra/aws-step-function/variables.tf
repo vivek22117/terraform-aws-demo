@@ -4,14 +4,14 @@ variable "profile" {
   description = "AWS Profile name for credentials"
 }
 
-variable "step-function-name" {
-  type = "string"
-  description = "Name of the step function"
-}
-
 variable "environment" {
   type        = "string"
   description = "AWS Profile name for credentials"
+}
+
+variable "step-function-name" {
+  type = "string"
+  description = "Name of the step function"
 }
 
 variable "email-reminder-lambda" {
@@ -34,6 +34,30 @@ variable "time-out" {
   description = "Lambda time out"
 }
 
+variable "allowed_ips" {
+  type = "list"
+  description = "List of ips allow"
+}
+
+variable "versioning_enabled" {
+  type = "string"
+  description = "Specify version enabled or not"
+}
+
+variable "lifecycle_rule_enabled" {
+  type = "string"
+  description = "Specify lifecycle enabled or not"
+}
+
+variable "prefix" {
+  type = "string"
+  description = "S3 prefix considered for Lifecycle Rule"
+}
+
+variable "noncurrent_version_expiration_days" {
+  type = "string"
+}
+
 //Default Variables
 variable "default_region" {
   type    = "string"
@@ -42,7 +66,7 @@ variable "default_region" {
 
 variable "s3_bucket_prefix" {
   type    = "string"
-  default = "teamconcept-tfstate"
+  default = "ddsolutions-tfstate"
 }
 
 variable "sms-lambda-bucket-key" {

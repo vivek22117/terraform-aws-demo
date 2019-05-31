@@ -23,6 +23,12 @@ variable "dyanamoDB_prefix" {
   description = "Pefix for dynamoDB Table"
 }
 
+variable "artifactory_bucket_prefix" {
+  type = "string"
+  description = "Prefind for Artifactory Bucket"
+  default = "teamconcept-deploy"
+}
+
 variable "default_region" {
   type    = "string"
   default = "us-east-1"

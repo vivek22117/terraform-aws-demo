@@ -37,3 +37,12 @@ resource "aws_lambda_function" "sms_reminder" {
 
   tags = "${local.common_tags}"
 }
+
+//Lambda function for STEP FUN execution
+resource "aws_lambda_function" "sf_executor" {
+  function_name = "${var.step-function-name}"
+  handler = "api-handler-lambda.lambda_handler"
+
+  role = ""
+  runtime = ""
+}

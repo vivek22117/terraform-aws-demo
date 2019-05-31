@@ -13,11 +13,3 @@ output "public_subnets" {
 output "bastion_sg" {
   value = "${module.vpc-dev.bastion_sg_id}"
 }
-
-output "deploy_bucket_name" {
-  value = "${module.vpc-dev.s3_deploy_bucket}"
-}
-
-output "deploy_bucket_arn" {
-  value = "${module.vpc-dev.s3_deploy_arn}"
-}

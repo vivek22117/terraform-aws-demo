@@ -4,3 +4,7 @@ step-function-name = ""
 environment = ""
 memory-size = ""
 time-out = ""
+allowed_ips = ["0.0.0.0/0"]
+versioning_enabled = "true"
+lifecycle_rule_enabled = "true"
+noncurrent_version_expiration_days = 7

@@ -4,6 +4,8 @@ resource "aws_s3_bucket" "main" {
   tags   = "${local.common_tags}"
   region = "${var.default_region}"
 
+  force_destroy = false
+
   lifecycle {
     prevent_destroy = "true"
   }
@@ -51,6 +53,44 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
     Name = "DynamoDb Terraform state lock Table"
   }
 }
+
+//Artifactory Bucket for Dev Environment
+resource "aws_s3_bucket" "s3_deploy_bucket" {
+  bucket = "${var.artifactory_bucket_prefix}-${var.environment}-${var.default_region}"
+  acl    = "private"
+  region = "${var.default_region}"
+
+  force_destroy = false
+
+  lifecycle {                               // Terraform meta parameter
+    prevent_destroy = "true"
+  }
+
+  server_side_encryption_configuration {
+    "rule" {
+      "apply_server_side_encryption_by_default" {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    enabled = true
+    id      = "deploy"
+    prefix  = "deploy/"
+
+    noncurrent_version_expiration {
+      days = 1
+    }
+  }
+
+  tags   = "${local.common_tags}"
+}
+
 
 resource "aws_iam_policy" "terraform_access_policy" {
   name = "TerraformAccessPolicy"
