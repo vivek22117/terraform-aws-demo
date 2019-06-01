@@ -58,8 +58,7 @@ resource "aws_iam_role" "lambda_access_role" {
             "Principal": {
                "Service": "lambda.amazonaws.com"
             },
-            "Effect": "Allow",
-            "Sid": ""
+            "Effect": "Allow"
         }
     ]
 }
@@ -80,9 +79,27 @@ resource "aws_iam_policy" "lambda_access_policy" {
       "Action": [
           "s3:Get*",
           "s3:Put*",
-          "s3:List*",
-      ]
+          "s3:List*"
+      ],
       "Resource": "*"
+    },
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*",
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "ses:*",
+        "states:*",
+        "sns:*"
+      ],
+      "Resource": "*",
+      "Effect": "Allow"
     }
   ]
 }

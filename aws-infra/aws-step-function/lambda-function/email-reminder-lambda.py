@@ -1,6 +1,7 @@
 import boto3
+import os
 
-VERIFIED_EMAIL = 'YOUR_SES_VERIFIED_EMAIL'
+VERIFIED_EMAIL = os.environ['VERIFIED_EMAIL']
 
 ses = boto3.client('ses')
 

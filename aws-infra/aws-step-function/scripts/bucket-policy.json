@@ -8,7 +8,7 @@
       "Action": [
         "s3:GetObject"
       ],
-      "Resource": "arn:aws:s3:::${bucket}/*"
+      "Resource": "arn:aws:s3:::${bucket}-${environment}-${region}/*"
     },
     {
       "Sid": "AllowedIPAccess",
@@ -17,7 +17,7 @@
       "Action": [
         "s3:GetObject"
       ],
-      "Resource": "arn:aws:s3:::${bucket}/*",
+      "Resource": "arn:aws:s3:::${bucket}-${environment}-${region}/*",
       "Condition" : {
         "IpAddress": {
           "aws:sourceIp": [

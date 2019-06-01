@@ -35,7 +35,7 @@ variable "time-out" {
 }
 
 variable "allowed_ips" {
-  type = "list"
+  type = "string"
   description = "List of ips allow"
 }
 
@@ -58,20 +58,35 @@ variable "noncurrent_version_expiration_days" {
   type = "string"
 }
 
+variable "api_gateway_reminder_path" {
+  type = "string"
+  description = "URL path for reminder api gateway resource"
+}
+
 //Default Variables
 variable "default_region" {
   type    = "string"
   default = "us-east-1"
 }
 
+variable "s3_static_content" {
+  type    = "string"
+  default = "ddsolutions-static-website"
+}
+
 variable "s3_bucket_prefix" {
   type    = "string"
-  default = "ddsolutions-tfstate"
+  default = "teamconcept-tfstate"
 }
 
 variable "sms-lambda-bucket-key" {
   type = "string"
   default = "lambda/sms-reminder-lambda.zip"
+}
+
+variable "api-handler-lambda-bucket-key" {
+  type = "string"
+  default = "lambda/api-handler-lambda.zip"
 }
 
 
