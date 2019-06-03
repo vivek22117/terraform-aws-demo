@@ -8,6 +8,7 @@ resource "aws_api_gateway_rest_api" "reminders_api" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
+
 }
 
 # API Gateway resource, which is a certain path inside the REST API
@@ -62,9 +63,4 @@ resource "aws_api_gateway_deployment" "reminders-api-dev-deployment" {
   depends_on = [
     "aws_api_gateway_integration.reminders_api_integration"
   ]
-}
-
-# URL to invoke the API
-output "url" {
-  value = "${aws_api_gateway_deployment.reminders-api-dev-deployment.invoke_url}"
 }

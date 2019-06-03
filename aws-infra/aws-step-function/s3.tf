@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "website_bucket" {
   }
 
   lifecycle_rule {
-    id      = "file"
+    id      = "staticFile"
     enabled = "${var.lifecycle_rule_enabled}"
     prefix  = "${var.prefix}"
 
