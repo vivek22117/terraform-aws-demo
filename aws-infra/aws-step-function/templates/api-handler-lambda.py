@@ -1,9 +1,9 @@
-import boto3
-import json
-import os
 import decimal
+import json
 
-STEP_FUN_ARN = os.environ['STEP_FUN_ARN']
+import boto3
+
+STEP_FUN_ARN = "${sf-arn}"
 
 sfn = boto3.client('stepfunctions')
 
@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     if False in checks:
         response = {
             "statusCode": 400,
-            "headers": {"Access-Control-Allow-Origin":"*"},
+            "headers": {"Access-Control-Allow-Origin": "*"},
             "body": json.dumps(
                 {
                     "Status": "Success",
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
         )
         response = {
             "statusCode": 200,
-            "headers": {"Access-Control-Allow-Origin":"*"},
+            "headers": {"Access-Control-Allow-Origin": "*"},
             "body": json.dumps(
                 {"Status": "Success"},
                 cls=DecimalEncoder

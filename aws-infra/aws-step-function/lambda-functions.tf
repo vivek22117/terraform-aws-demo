@@ -11,6 +11,12 @@ resource "aws_lambda_function" "email_reminder" {
   runtime = "python3.7"
   timeout = "${var.time-out}"
 
+  environment {
+    variables = {
+      verified_email = "${var.verified_email}"
+    }
+  }
+
   tags = "${local.common_tags}"
 }
 

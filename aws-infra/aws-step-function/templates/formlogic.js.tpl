@@ -1,7 +1,7 @@
 // Replace the YOUR_API_ENDPOINT_URL with yours
 // It should look something like this:
 
-var API_ENDPOINT = 'https://uuav7xof5b.execute-api.us-east-1.amazonaws.com/dev/dev/reminders';
+var API_ENDPOINT = '${api-gateway-api}/reminders';
 
 // Setup divs that will be used to display interactive messages
 var errorDiv = document.getElementById('error-message')

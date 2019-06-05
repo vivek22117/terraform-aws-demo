@@ -14,3 +14,6 @@ noncurrent_version_expiration_days = 2
 
 api_gateway_reminder_path = "reminders"
 prefix = "deploy/"
+
+sns_stack_name = "sns-reminder-cft-stack"
+display_name = "ReminderSNSTopic"

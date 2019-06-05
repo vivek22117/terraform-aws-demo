@@ -63,6 +63,16 @@ variable "api_gateway_reminder_path" {
   description = "URL path for reminder api gateway resource"
 }
 
+variable "display_name" {
+  type = "string"
+  description = "Name shown in confirmation emails"
+}
+
+variable "sns_stack_name" {
+  type        = "string"
+  description = "Unique Cloudformation stack name that wraps the SNS topic."
+}
+
 //Default Variables
 variable "default_region" {
   type    = "string"
@@ -89,6 +99,23 @@ variable "api-handler-lambda-bucket-key" {
   default = "lambda/api-handler-lambda.zip"
 }
 
+variable "protocol" {
+  type = "list"
+  default = ["SMS", "SMS"]
+  description = "SNS protocols to use"
+}
+
+variable "verified_email" {
+  type = "string"
+  default = "vivekmishra22117@gmail.com"
+}
+
+
+variable "mobile_numbers" {
+  type = "list"
+  default = ["+919630436367", "+919406736293"]
+  description = "Contact address to send notification to"
+}
 
 //Local variables
 locals {

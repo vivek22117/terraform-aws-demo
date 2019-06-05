@@ -76,7 +76,7 @@ resource "aws_s3_bucket_object" "image_file" {
 
 resource "aws_s3_bucket_object" "form_file" {
   bucket = "${aws_s3_bucket.website_bucket.id}"
-  source = "static-website/formlogic.js"
+  source = "${path.module}/static-website/formlogic.js"
   key = "formlogic.js"
   content_type = "text/js"
   depends_on = [
