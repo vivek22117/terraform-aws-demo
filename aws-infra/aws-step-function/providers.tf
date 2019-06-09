@@ -13,6 +13,10 @@ provider "archive" {
   version = "1.2.2"
 }
 
+provider "local" {
+  version = "1.2.2"
+}
+
 terraform {
   required_version = ">= 0.11.13"
 

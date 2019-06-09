@@ -11,7 +11,7 @@ sfn = boto3.client('stepfunctions')
 def lambda_handler(event, context):
     print('EVENT:')
     print(event)
-    data = json.loads(event['body'])
+    data = event
     data['waitSeconds'] = int(data['waitSeconds'])
 
     # Validation Checks

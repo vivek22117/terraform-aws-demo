@@ -18,7 +18,6 @@ resource "aws_launch_configuration" "bastion_launch_conf" {
   }
 }
 
-
 //Bastion host ASG
 resource "aws_autoscaling_group" "bastion_asg" {
   name = "bastion-asg-${aws_launch_configuration.bastion_launch_conf.name}"

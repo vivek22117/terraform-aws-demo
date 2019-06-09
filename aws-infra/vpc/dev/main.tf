@@ -3,15 +3,19 @@ module "vpc-dev" {
 
   profile     = "${var.profile}"
   environment = "${var.environment}"
+  default_region = "${var.default_region}"
 
   cidr_block      = "${var.cidr_block}"
   available_zones = "${var.available_zones}"
+  instance_tenancy = "${var.instance_tenancy}"
+  enable_dns = "${var.enable_dns}"
+  support_dns = "${var.support_dns}"
+  enable_nat_gateway = "${var.enable_nat_gateway}"
 
   team  = "${var.team}"
   owner = "${var.owner}"
 
   bastion_instance = "${var.bastion_instance}"
-  public_key = "${var.public_key}"
 }
 
 data "terraform_remote_state" "s3" {

@@ -1,11 +1,11 @@
 resource "aws_vpc" "dev_vpc" {
   cidr_block           = "${var.cidr_block}"
-  enable_dns_hostnames = true
+  enable_dns_hostnames = "${var.enable_dns}"
+  instance_tenancy = "${var.instance_tenancy}"
+  enable_dns_support = "${var.support_dns}"
 
-  tags {
-    Name  = "VPC_${var.environment}_${var.cidr_block}"
-    owner = "${var.owner}"
-  }
+
+  tags = "${merge(local.common_tags, map("Name", "VPC_${var.environment}_${var.cidr_block}"))}"
 }
 
 ######################################################
@@ -15,8 +15,6 @@ resource "aws_vpc" "dev_vpc" {
 resource "aws_internet_gateway" "vpc_igw" {
   vpc_id = "${aws_vpc.dev_vpc.id}"
 
-  tags {
-    Name = "IGW-${var.environment}"
-  }
+  tags = "${merge(local.common_tags, map("Name", "IGW-${var.environment}"))}"
 }
 
