@@ -13,3 +13,7 @@ output "public_subnets" {
 output "bastion_sg" {
   value = "${module.vpc-dev.bastion_sg_id}"
 }
+
+output "vpc_cidr" {
+  value = "${module.vpc-dev.vpc_cidr_block}"
+}

@@ -3,6 +3,11 @@ resource "aws_key_pair" "bastion_key" {
   key_name = "bastion-key"
 }
 
+resource "aws_key_pair" "kafka_key" {
+  public_key = "${var.public_key}"
+  key_name = "kafka-key"
+}
+
 //Bastion host launch configuration and act as Jump Instance
 resource "aws_launch_configuration" "bastion_launch_conf" {
   name_prefix = "bastion-"
