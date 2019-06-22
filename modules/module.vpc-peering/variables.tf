@@ -1,29 +1,50 @@
-variable "public_route_tb_id" {
-  type = "string"
-  description = "Public route table Id"
+######################################################
+# Global variables for VPC and Bastion Host
+######################################################
+variable "profile" {
+  type        = "string"
+  description = "AWS Profile name for credentials"
 }
 
-variable "private_route_tb_ids" {
-  type = "list"
-  description = "Private route table Id"
+variable "default_region" {
+  type    = "string"
+  description = "AWS region to deploy resources"
 }
 
-variable "peer_cidr" {
-  type = "string"
-  description = "CIDR of vpc peering connection"
+
+#########################################################
+# Default variables for backend and SSH key for Bastion #
+#########################################################
+variable "s3_bucket_prefix" {
+  type        = "string"
+  default     = "teamconcept-tfstate"
+  description = "Prefix for s3 bucket"
 }
 
-variable "peering_connection_id" {
-  type = "string"
-  description = "Connection id of peeering VPC"
+
+######################################################
+# Local variables defined                            #
+######################################################
+variable "team" {
+  type    = "string"
+  description = "Owner team for this applcation infrastructure"
 }
 
-variable "requester_vpc_id" {
-  type = "string"
-  description = "Requester VPC id"
+variable "owner" {
+  type        = "string"
+  description = "Owner of the product"
 }
 
-variable "accepter_vpc_id" {
-  type = "string"
-  description = "Accepter VPC id"
+variable "environment" {
+  type        = "string"
+  description = "Environmet to be used"
+}
+
+//Local variables
+locals {
+  common_tags = {
+    owner       = "${var.owner}"
+    team        = "${var.team}"
+    environment = "${var.environment}"
+  }
 }
