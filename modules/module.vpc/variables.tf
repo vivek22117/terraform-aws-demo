@@ -41,7 +41,7 @@ variable "enable_nat_gateway" {
   description = "want to create nat-gateway or not"
 }
 
-variable "bastion_instance" {
+variable "bastion_instance_type" {
   type = "string"
   description = "Instance type for Bastion Instance"
 }

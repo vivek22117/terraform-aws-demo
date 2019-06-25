@@ -13,7 +13,7 @@ resource "aws_launch_configuration" "bastion_launch_conf" {
   name_prefix = "bastion-"
 
   image_id = "${data.aws_ami.bastion.id}"
-  instance_type = "${var.bastion_instance}"
+  instance_type = "${var.bastion_instance_type}"
   key_name = "${aws_key_pair.bastion_key.key_name}"
   security_groups = ["${aws_security_group.bastion_host_sg.id}"]
   associate_public_ip_address = true

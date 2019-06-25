@@ -20,8 +20,8 @@ resource "aws_launch_configuration" "jenkins_slave_launch_conf" {
   key_name        = "${aws_key_pair.jenkins_slaves.key_name}"
   security_groups = ["${aws_security_group.jenkins_slaves_sg.id}"]
 
-  user_data            = "${data.template_file.user_data_slave.rendered}"
-  iam_instance_profile = "${aws_iam_instance_profile.jenkins_profile.arn}"
+  user_data                   = "${data.template_file.user_data_slave.rendered}"
+  iam_instance_profile        = "${aws_iam_instance_profile.jenkins_profile.arn}"
   associate_public_ip_address = false
 
   root_block_device {

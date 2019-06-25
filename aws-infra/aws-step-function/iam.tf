@@ -66,9 +66,9 @@ EOF
 }
 
 resource "aws_iam_policy" "lambda_access_policy" {
-  name = "StepFunctionLambdaAccessPolicy"
+  name        = "StepFunctionLambdaAccessPolicy"
   description = "Policy attached for lambda access"
-  path = "/"
+  path        = "/"
 
   policy = <<EOF
 {

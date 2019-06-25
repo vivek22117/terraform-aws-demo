@@ -1,7 +1,9 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "${var.s3_bucket_prefix}-${var.environment}-${var.default_region}"
+  count = "${var.create_env}"
+
+  bucket = "${var.s3_bucket_prefix}-${element(var.environment_list, count.index)}-${var.default_region}"
   acl    = "private"
-  tags   = "${local.common_tags}"
+  tags   = "${merge(local.common_tags, map("environment", element(var.environment_list, count.index)))}"
   region = "${var.default_region}"
 
   force_destroy = false
@@ -34,7 +36,9 @@ resource "aws_s3_bucket" "main" {
 }
 
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
-  name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
+  count = "${var.create_env}"
+
+  name           = "${var.dyanamoDB_prefix}-${element(var.environment_list, count.index)}-${var.default_region}"
   read_capacity  = 5
   write_capacity = 5
 
@@ -56,14 +60,16 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
 
 //Artifactory Bucket for Dev Environment
 resource "aws_s3_bucket" "s3_deploy_bucket" {
-  bucket = "${var.artifactory_bucket_prefix}-${var.environment}-${var.default_region}"
+  count = "${var.create_env}"
+
+  bucket = "${var.artifactory_bucket_prefix}-${element(var.environment_list, count.index)}-${var.default_region}"
   acl    = "private"
   region = "${var.default_region}"
 
   force_destroy = false
 
-  lifecycle {                               // Terraform meta parameter
-    prevent_destroy = "true"
+  lifecycle {
+    prevent_destroy = "true" // Terraform meta parameter
   }
 
   server_side_encryption_configuration {
@@ -88,9 +94,8 @@ resource "aws_s3_bucket" "s3_deploy_bucket" {
     }
   }
 
-  tags   = "${local.common_tags}"
+  tags = "${merge(local.common_tags, map("environment", element(var.environment_list, count.index)))}"
 }
-
 
 resource "aws_iam_policy" "terraform_access_policy" {
   name = "TerraformAccessPolicy"

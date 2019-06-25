@@ -5,17 +5,17 @@ resource "aws_api_gateway_rest_api" "reminders_api" {
 
   # An optional description of the REST API
   description = "A Prototype REST API to execute Step Function for reminder"
+
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-
 }
 
 # API Gateway resource, which is a certain path inside the REST API
 resource "aws_api_gateway_resource" "reminders_api_resource" {
   # The id of the associated REST API and parent API resource are required
   rest_api_id = "${aws_api_gateway_rest_api.reminders_api.id}"
-  parent_id = "${aws_api_gateway_rest_api.reminders_api.root_resource_id}"
+  parent_id   = "${aws_api_gateway_rest_api.reminders_api.root_resource_id}"
 
   # The last segment of the URL path for this API resource
   path_part = "${var.api_gateway_reminder_path}"
@@ -61,6 +61,6 @@ resource "aws_api_gateway_deployment" "reminders-api-dev-deployment" {
 
   # Deployment should always occur after lambda integration
   depends_on = [
-    "aws_api_gateway_integration.reminders_api_integration"
+    "aws_api_gateway_integration.reminders_api_integration",
   ]
 }

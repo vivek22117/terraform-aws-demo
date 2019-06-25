@@ -1,4 +1,4 @@
-module "vpc-dev" {
+module "vpc-prod" {
   source = "../../../modules/module.vpc"
 
   profile        = "${var.profile}"

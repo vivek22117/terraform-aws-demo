@@ -4,10 +4,9 @@ variable "profile" {
   description = "AWS Profile name for credentials"
 }
 
-variable "environment" {
+variable "create_env" {
   type        = "string"
-  description = "Environmet to be used"
-  default     = "dev"
+  description = "Number of environment to create for deployment"
 }
 
 //Default Variables
@@ -24,9 +23,9 @@ variable "dyanamoDB_prefix" {
 }
 
 variable "artifactory_bucket_prefix" {
-  type = "string"
+  type        = "string"
   description = "Prefind for Artifactory Bucket"
-  default = "teamconcept-deploy"
+  default     = "teamconcept-deploy"
 }
 
 variable "default_region" {
@@ -34,11 +33,15 @@ variable "default_region" {
   default = "us-east-1"
 }
 
+variable "environment_list" {
+  type    = "list"
+  default = ["dev", "prod", "shared"]
+}
+
 //Local variables
 locals {
   common_tags = {
-    owner       = "Vivek"
-    team        = "TeamConcept"
-    environment = "${var.environment}"
+    owner = "Vivek"
+    team  = "TeamConcept"
   }
 }

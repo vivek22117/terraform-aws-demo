@@ -9,6 +9,6 @@ output "s3_bucket_website_endpoint" {
 }
 
 output "sns_arn" {
-  value = "${aws_cloudformation_stack.sns_reminder_stack.outputs["SNSARN"]}"
+  value       = "${aws_cloudformation_stack.sns_reminder_stack.outputs["SNSARN"]}"
   description = "Email SNS topic ARN"
 }
