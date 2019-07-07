@@ -1,10 +1,7 @@
 resource "aws_s3_bucket" "main" {
-  count = "${var.create_env}"
-
-  bucket = "${var.s3_bucket_prefix}-${element(var.environment_list, count.index)}-${var.default_region}"
+  bucket = "${var.s3_bucket_prefix}-${var.environment}-${var.default_region}"
   acl    = "private"
-  tags   = "${merge(local.common_tags, map("environment", element(var.environment_list, count.index)))}"
-  region = "${var.default_region}"
+  region = var.default_region
 
   force_destroy = false
 
@@ -13,8 +10,8 @@ resource "aws_s3_bucket" "main" {
   }
 
   server_side_encryption_configuration {
-    "rule" {
-      "apply_server_side_encryption_by_default" {
+    rule {
+      apply_server_side_encryption_by_default {
         sse_algorithm = "AES256"
       }
     }
@@ -33,18 +30,18 @@ resource "aws_s3_bucket" "main" {
       days = 1
     }
   }
+
+  tags = "${merge(local.common_tags, map("environment", "var.environment"))}"
 }
 
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
-  count = "${var.create_env}"
-
-  name           = "${var.dyanamoDB_prefix}-${element(var.environment_list, count.index)}-${var.default_region}"
+  name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
   read_capacity  = 5
   write_capacity = 5
 
   hash_key = "LockID"
 
-  "attribute" {
+  attribute {
     name = "LockID"
     type = "S"
   }
@@ -53,18 +50,16 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
     prevent_destroy = true
   }
 
-  tags {
+  tags = {
     Name = "DynamoDb Terraform state lock Table"
   }
 }
 
 //Artifactory Bucket for Dev Environment
 resource "aws_s3_bucket" "s3_deploy_bucket" {
-  count = "${var.create_env}"
-
-  bucket = "${var.artifactory_bucket_prefix}-${element(var.environment_list, count.index)}-${var.default_region}"
+  bucket = "${var.artifactory_bucket_prefix}-${var.environment}-${var.default_region}"
   acl    = "private"
-  region = "${var.default_region}"
+  region = var.default_region
 
   force_destroy = false
 
@@ -73,8 +68,8 @@ resource "aws_s3_bucket" "s3_deploy_bucket" {
   }
 
   server_side_encryption_configuration {
-    "rule" {
-      "apply_server_side_encryption_by_default" {
+    rule {
+      apply_server_side_encryption_by_default {
         sse_algorithm = "AES256"
       }
     }
@@ -94,7 +89,7 @@ resource "aws_s3_bucket" "s3_deploy_bucket" {
     }
   }
 
-  tags = "${merge(local.common_tags, map("environment", element(var.environment_list, count.index)))}"
+  tags = "${merge(local.common_tags, map("environment", "var.environment"))}"
 }
 
 resource "aws_iam_policy" "terraform_access_policy" {
@@ -112,6 +107,7 @@ resource "aws_iam_policy" "terraform_access_policy" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role" "terraform_access_role" {
@@ -133,9 +129,11 @@ resource "aws_iam_role" "terraform_access_role" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "terraform_access" {
-  policy_arn = "${aws_iam_policy.terraform_access_policy.arn}"
-  role       = "${aws_iam_role.terraform_access_role.name}"
+policy_arn = aws_iam_policy.terraform_access_policy.arn
+role       = aws_iam_role.terraform_access_role.name
 }
+
