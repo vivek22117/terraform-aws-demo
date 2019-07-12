@@ -7,7 +7,7 @@ variable "profile" {
 }
 
 variable "default_region" {
-  type    = "string"
+  type        = "string"
   description = "AWS region to deploy resources"
 }
 
@@ -17,17 +17,17 @@ variable "cidr_block" {
 }
 
 variable "instance_tenancy" {
-  type = "string"
+  type        = "string"
   description = "type of instance required"
 }
 
 variable "enable_dns" {
-  type = "string"
+  type        = "string"
   description = "To use private DNS within the VPC"
 }
 
 variable "support_dns" {
-  type = "string"
+  type        = "string"
   description = "To use private DNS support within the VPC"
 }
 
@@ -37,12 +37,12 @@ variable "available_zones" {
 }
 
 variable "enable_nat_gateway" {
-  type = "string"
+  type        = "string"
   description = "want to create nat-gateway or not"
 }
 
 variable "bastion_instance_type" {
-  type = "string"
+  type        = "string"
   description = "Instance type for Bastion Instance"
 }
 
@@ -56,16 +56,16 @@ variable "s3_bucket_prefix" {
 }
 
 variable "public_key" {
-  type = "string"
+  type        = "string"
   description = "key pair value"
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDV3fznjm92/s10goG0YotNIjq66CTDyf5a6wVVQUDYIF4OziH9G81NNc9sQiTlfNFy8RO4kSB0n5+w9nt90gs7nSZoBAATK6T0YNHll/A6ISUv4hgwooa6XUYxFgg+ceZ8Mvxc36wx78wTieVc7RTbx74Wr8AtavSJMC8wVb8QkUGMpumH7TNPP356MYEEgYciRLE8sLnkRYOvVekL3iU8p1tS5Pny5mqR1hinbQoE7WNuDsBxgV6Xn9kRQ9Rn5seIyY55tc1HPd2fwkafidWVX3hUD8RwOfSYvAwPc7AmVLCbUCktSZ8S1FEV9dSVncd8ji1tguoHh/OquXzNckqJ vivek@LAPTOP-FLDAPLLM"
+  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDV3fznjm92/s10goG0YotNIjq66CTDyf5a6wVVQUDYIF4OziH9G81NNc9sQiTlfNFy8RO4kSB0n5+w9nt90gs7nSZoBAATK6T0YNHll/A6ISUv4hgwooa6XUYxFgg+ceZ8Mvxc36wx78wTieVc7RTbx74Wr8AtavSJMC8wVb8QkUGMpumH7TNPP356MYEEgYciRLE8sLnkRYOvVekL3iU8p1tS5Pny5mqR1hinbQoE7WNuDsBxgV6Xn9kRQ9Rn5seIyY55tc1HPd2fwkafidWVX3hUD8RwOfSYvAwPc7AmVLCbUCktSZ8S1FEV9dSVncd8ji1tguoHh/OquXzNckqJ vivek@LAPTOP-FLDAPLLM"
 }
 
 ######################################################
 # Local variables defined                            #
 ######################################################
 variable "team" {
-  type    = "string"
+  type        = "string"
   description = "Owner team for this applcation infrastructure"
 }
 

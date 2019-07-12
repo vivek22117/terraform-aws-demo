@@ -17,12 +17,13 @@ resource "aws_iam_role" "jenkins_access_role" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy" "jenkins_access_policy" {
-  name        = "JenkinsAWSResourcePolicy"
+  name = "JenkinsAWSResourcePolicy"
   description = "Policy to access AWS Resources"
-  path        = "/"
+  path = "/"
 
   policy = <<EOF
 {
@@ -36,14 +37,16 @@ resource "aws_iam_policy" "jenkins_access_policy" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "policy_role_attach" {
-  policy_arn = "${aws_iam_policy.jenkins_access_policy.arn}"
-  role       = "${aws_iam_role.jenkins_access_role.name}"
+policy_arn = aws_iam_policy.jenkins_access_policy.arn
+role       = aws_iam_role.jenkins_access_role.name
 }
 
 resource "aws_iam_instance_profile" "jenkins_profile" {
-  name = "JenkinsSlavesAccessProfile"
-  role = "${aws_iam_role.jenkins_access_role.name}"
+name = "JenkinsSlavesAccessProfile"
+role = aws_iam_role.jenkins_access_role.name
 }
+

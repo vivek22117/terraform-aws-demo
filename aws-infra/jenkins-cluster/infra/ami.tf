@@ -17,3 +17,4 @@ data "aws_ami" "jenkins-slave-ami" {
     values = ["jenkins-slave-ddsolutions"]
   }
 }
+

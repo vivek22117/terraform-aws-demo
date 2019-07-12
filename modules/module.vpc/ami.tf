@@ -1,9 +1,9 @@
 data "aws_ami" "bastion" {
-  owners = ["self"]
+  owners      = ["self"]
   most_recent = true
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["dd-bastion"]
   }
 }

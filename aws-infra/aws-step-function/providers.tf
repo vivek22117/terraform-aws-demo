@@ -1,8 +1,8 @@
 provider "aws" {
-  region  = "${var.default_region}"
-  profile = "${var.profile}"
+  region  = var.default_region
+  profile = var.profile
 
-  version = "2.7.0"
+  version = "2.17.0"
 }
 
 provider "template" {
@@ -18,7 +18,7 @@ provider "local" {
 }
 
 terraform {
-  required_version = ">= 0.11.13"
+  required_version = ">= 0.12" // Terraform version
 
   backend "s3" {
     profile        = "doubledigit"
@@ -29,3 +29,4 @@ terraform {
     encrypt        = "true"
   }
 }
+

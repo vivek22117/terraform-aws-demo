@@ -18,12 +18,13 @@ resource "aws_iam_role" "sf_access_role" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy" "sf_access_policy" {
-  name        = "StepFunctionAccessPolicy"
+  name = "StepFunctionAccessPolicy"
   description = "Policy to access AWS Resources"
-  path        = "/"
+  path = "/"
 
   policy = <<EOF
 {
@@ -37,19 +38,20 @@ resource "aws_iam_policy" "sf_access_policy" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "policy_role_attach" {
-  policy_arn = "${aws_iam_policy.sf_access_policy.arn}"
-  role       = "${aws_iam_role.sf_access_role.name}"
+policy_arn = aws_iam_policy.sf_access_policy.arn
+role       = aws_iam_role.sf_access_role.name
 }
 
 #Define policy and role for AWS Lambda
 resource "aws_iam_role" "lambda_access_role" {
-  name = "StepFunctionLambdaAccessRole"
-  path = "/"
+name = "StepFunctionLambdaAccessRole"
+path = "/"
 
-  assume_role_policy = <<EOF
+assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -63,14 +65,15 @@ resource "aws_iam_role" "lambda_access_role" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy" "lambda_access_policy" {
-  name        = "StepFunctionLambdaAccessPolicy"
-  description = "Policy attached for lambda access"
-  path        = "/"
+name = "StepFunctionLambdaAccessPolicy"
+description = "Policy attached for lambda access"
+path = "/"
 
-  policy = <<EOF
+policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -104,9 +107,11 @@ resource "aws_iam_policy" "lambda_access_policy" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_role_attach" {
-  policy_arn = "${aws_iam_policy.lambda_access_policy.arn}"
-  role       = "${aws_iam_role.lambda_access_role.name}"
+  policy_arn = aws_iam_policy.lambda_access_policy.arn
+  role       = aws_iam_role.lambda_access_role.name
 }
+

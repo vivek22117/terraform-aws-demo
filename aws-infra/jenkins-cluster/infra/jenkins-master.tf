@@ -1,17 +1,21 @@
 resource "aws_key_pair" "jenkins_slaves" {
   key_name   = "jenkins-slaves"
-  public_key = "${var.public_key}"
+  public_key = var.public_key
 }
 
 resource "aws_launch_configuration" "jenkins_master" {
-  # Launch Configurations cannot be updated after creation with the AWS API.  # In order to update a Launch Configuration, Terraform will destroy the  # existing resource and create a replacement.  #  # We're only setting the name_prefix here,  # Terraform will add a random string at the end to keep it unique.
+  # Launch Configurations cannot be updated after creation with the AWS API.
+  # In order to update a Launch Configuration, Terraform will destroy the
+  # existing resource and create a replacement.
+  #  # We're only setting the name_prefix here,
+  # Terraform will add a random string at the end to keep it unique.
 
   name_prefix          = "jenkins-"
-  image_id             = "${data.aws_ami.jenkins-master-ami.id}"
-  instance_type        = "${var.environment == "dev" ? "t2.micro" : "t2.small"}"
-  iam_instance_profile = "${aws_iam_instance_profile.jenkins_profile.id}"
-  key_name             = "${aws_key_pair.jenkins_slaves.key_name}"
-  security_groups      = ["${aws_security_group.jenkins_master_sg.id}"]
+  image_id             = data.aws_ami.jenkins-master-ami.id
+  instance_type        = var.environment == "dev" ? "t2.micro" : "t2.small"
+  iam_instance_profile = aws_iam_instance_profile.jenkins_profile.id
+  key_name             = aws_key_pair.jenkins_slaves.key_name
+  security_groups      = [aws_security_group.jenkins_master_sg.id]
 
   associate_public_ip_address = false
   enable_monitoring           = false
@@ -24,12 +28,12 @@ resource "aws_launch_configuration" "jenkins_master" {
 resource "aws_autoscaling_group" "jenkins_master_asg" {
   name = "${aws_launch_configuration.jenkins_master.name}-asg"
 
-  vpc_zone_identifier  = ["${data.terraform_remote_state.vpc.private_subnets}"]
+  vpc_zone_identifier  = [data.terraform_remote_state.vpc.outputs.private_subnets]
   max_size             = 3
-  min_size             = "${var.environment == "prod" ? 2 : 1}"
-  desired_capacity     = "${var.environment == "prod" ? 2 : 1}"
-  launch_configuration = "${aws_launch_configuration.jenkins_master.id}"
-  load_balancers       = ["${aws_elb.jenkins_elb.name}"]
+  min_size             = var.environment == "prod" ? 2 : 1
+  desired_capacity     = var.environment == "prod" ? 2 : 1
+  launch_configuration = aws_launch_configuration.jenkins_master.id
+  load_balancers       = [aws_elb.jenkins_elb.name]
   health_check_type    = "ELB"
 
   lifecycle {
@@ -55,11 +59,10 @@ resource "aws_autoscaling_group" "jenkins_master_asg" {
   }
 }
 
-// Jenkins ELB
 resource "aws_elb" "jenkins_elb" {
-  subnets                   = ["${data.terraform_remote_state.vpc.public_subnets}"]
+  subnets                   = [data.terraform_remote_state.vpc.outputs.public_subnets]
   cross_zone_load_balancing = true
-  security_groups           = ["${aws_security_group.lb_sg.id}"]
+  security_groups           = [aws_security_group.lb_sg.id]
   internal                  = false
 
   /*  listener {
@@ -82,10 +85,11 @@ resource "aws_elb" "jenkins_elb" {
     target              = "TCP:8080"
     interval            = 5
   }
-  tags {
+  tags = {
     Name        = "jenkins_elb"
     Author      = "vivek"
     Tool        = "Terraform"
     Environment = "dev"
   }
 }
+

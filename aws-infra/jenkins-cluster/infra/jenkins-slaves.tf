@@ -1,13 +1,13 @@
 // Jenkins slaves resource template
 data "template_file" "user_data_slave" {
-  template = "${file("scripts/join-cluster.tpl")}"
+  template = file("scripts/join-cluster.tpl")
 
-  vars {
+  vars = {
     jenkins_url            = "http://${aws_elb.jenkins_elb.dns_name}"
-    jenkins_username       = "${var.jenkins_username}"
-    jenkins_password       = "${var.jenkins_password}"
-    jenkins_credentials_id = "${var.jenkins_credentials_id}"
-    environment            = "${var.environment}"
+    jenkins_username       = var.jenkins_username
+    jenkins_password       = var.jenkins_password
+    jenkins_credentials_id = var.jenkins_credentials_id
+    environment            = var.environment
   }
 }
 
@@ -15,13 +15,13 @@ data "template_file" "user_data_slave" {
 resource "aws_launch_configuration" "jenkins_slave_launch_conf" {
   name_prefix = "jenkins-slave-"
 
-  image_id        = "${data.aws_ami.jenkins-slave-ami.id}"
-  instance_type   = "${var.environment == "prod" ? "t2.small" : "t2.micro"}"
-  key_name        = "${aws_key_pair.jenkins_slaves.key_name}"
-  security_groups = ["${aws_security_group.jenkins_slaves_sg.id}"]
+  image_id        = data.aws_ami.jenkins-slave-ami.id
+  instance_type   = var.environment == "prod" ? "t2.small" : "t2.micro"
+  key_name        = aws_key_pair.jenkins_slaves.key_name
+  security_groups = [aws_security_group.jenkins_slaves_sg.id]
 
-  user_data                   = "${data.template_file.user_data_slave.rendered}"
-  iam_instance_profile        = "${aws_iam_instance_profile.jenkins_profile.arn}"
+  user_data                   = data.template_file.user_data_slave.rendered
+  iam_instance_profile        = aws_iam_instance_profile.jenkins_profile.arn
   associate_public_ip_address = false
 
   root_block_device {
@@ -39,11 +39,11 @@ resource "aws_launch_configuration" "jenkins_slave_launch_conf" {
 resource "aws_autoscaling_group" "jenkins_slaves_asg" {
   name_prefix = "${aws_launch_configuration.jenkins_slave_launch_conf.name}-asg"
 
-  max_size             = 3
-  min_size             = "${var.environment == "prod" ? 2 : 1}"
-  desired_capacity     = "${var.environment == "prod" ? 2 : 1}"
-  vpc_zone_identifier  = ["${data.terraform_remote_state.vpc.private_subnets}"]
-  launch_configuration = "${aws_launch_configuration.jenkins_slave_launch_conf.name}"
+  max_size         = 3
+  min_size         = var.environment == "prod" ? 2 : 1
+  desired_capacity = var.environment == "prod" ? 2 : 1
+  vpc_zone_identifier  = [data.terraform_remote_state.vpc.outputs.private_subnets]
+  launch_configuration = aws_launch_configuration.jenkins_slave_launch_conf.name
 
   health_check_grace_period = 100
   health_check_type         = "EC2"
@@ -81,12 +81,12 @@ resource "aws_cloudwatch_metric_alarm" "high-cpu-jenkins-slaves-alarm" {
   statistic           = "Average"
   threshold           = "80"
 
-  dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.jenkins_slaves_asg.name}"
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.jenkins_slaves_asg.name
   }
 
   alarm_description = "This metric monitors ec2 cpu utilization"
-  alarm_actions     = ["${aws_autoscaling_policy.scale-out.arn}"]
+  alarm_actions     = [aws_autoscaling_policy.scale-out.arn]
 }
 
 resource "aws_autoscaling_policy" "scale-out" {
@@ -94,7 +94,7 @@ resource "aws_autoscaling_policy" "scale-out" {
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins_slaves_asg.name}"
+  autoscaling_group_name = aws_autoscaling_group.jenkins_slaves_asg.name
 }
 
 // Scale In
@@ -108,12 +108,12 @@ resource "aws_cloudwatch_metric_alarm" "low-cpu-jenkins-slaves-alarm" {
   statistic           = "Average"
   threshold           = "50"
 
-  dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.jenkins_slaves_asg.name}"
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.jenkins_slaves_asg.name
   }
 
   alarm_description = "This metric monitors ec2 cpu utilization"
-  alarm_actions     = ["${aws_autoscaling_policy.scale-in.arn}"]
+  alarm_actions     = [aws_autoscaling_policy.scale-in.arn]
 }
 
 resource "aws_autoscaling_policy" "scale-in" {
@@ -121,5 +121,6 @@ resource "aws_autoscaling_policy" "scale-in" {
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins_slaves_asg.name}"
+  autoscaling_group_name = aws_autoscaling_group.jenkins_slaves_asg.name
 }
+
