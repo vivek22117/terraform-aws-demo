@@ -8,23 +8,23 @@
 ######################################################
 resource "aws_eip" "nat_eip" {
   vpc   = true
-  count = var.enable_nat_gateway == true ? length(var.available_zones) : 0
+  count = var.enable_nat_gateway == true ? length(var.public_azs_with_cidr) : 0
 
   tags = {
-    Name = "EIP_${var.environment}_${aws_vpc.dev_vpc.id}_${count.index}"
+    Name = "EIP_${var.environment}_${aws_vpc.vpc.id}_${count.index}"
   }
 }
 
 //Create NatGateway and allocate EIP
 resource "aws_nat_gateway" "nat_gateway" {
   depends_on = ["aws_internet_gateway.vpc_igw"]
-  count      = var.enable_nat_gateway == true ? length(var.available_zones) : 0
+  count      = var.enable_nat_gateway == true ? length(var.public_azs_with_cidr) : 0
 
   allocation_id = aws_eip.nat_eip.*.id[count.index]
   subnet_id     = aws_subnet.public.*.id[count.index]
 
   tags = {
-    Name = "NAT_${var.environment}_${aws_vpc.dev_vpc.id}_${count.index}"
+    Name = "NAT_${var.environment}_${aws_vpc.vpc.id}_${count.index}"
   }
 }
 
@@ -34,14 +34,14 @@ resource "aws_nat_gateway" "nat_gateway" {
 # to the Internet
 ######################################################
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.dev_vpc.id
-  count  = length(var.available_zones)
+  vpc_id = aws_vpc.vpc.id
+  count  = length(var.private_azs_with_cidr)
 
-  tags = merge(local.common_tags, map("Name", "Private_route_${var.environment}_${aws_vpc.dev_vpc.id}_${count.index}"))
+  tags = merge(local.common_tags, map("Name", "Private_route_${var.environment}_${aws_vpc.vpc.id}_${count.index}"))
 }
 
 resource "aws_route" "private_nat_gateway" {
-  count = var.enable_nat_gateway == true ? length(var.available_zones) : 0
+  count = var.enable_nat_gateway == true ? length(var.private_azs_with_cidr) : 0
 
   route_table_id         = aws_route_table.private.*.id[count.index]
   destination_cidr_block = "0.0.0.0/0"
@@ -49,7 +49,7 @@ resource "aws_route" "private_nat_gateway" {
 }
 
 resource "aws_route_table_association" "private_association" {
-  count = length(var.available_zones)
+  count = length(var.private_azs_with_cidr)
 
   route_table_id = aws_route_table.private.*.id[count.index]
   subnet_id      = aws_subnet.private.*.id[count.index]
@@ -60,18 +60,18 @@ resource "aws_route_table_association" "private_association" {
 # the Internet Gateway
 ######################################################
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.dev_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpc_igw.id
   }
 
-  tags = merge(local.common_tags, map("Name", "Public_route_${var.environment}_${aws_vpc.dev_vpc.id}"))
+  tags = merge(local.common_tags, map("Name", "Public_route_${var.environment}_${aws_vpc.vpc.id}"))
 }
 
 resource "aws_route_table_association" "public_association" {
-  count = length(var.available_zones)
+  count = length(var.public_azs_with_cidr)
 
   route_table_id = aws_route_table.public.id
   subnet_id      = aws_subnet.public.*.id[count.index]
@@ -82,14 +82,14 @@ resource "aws_route_table_association" "public_association" {
 # Each subnet in a different AZ
 ######################################################
 resource "aws_subnet" "public" {
-  count = length(var.available_zones)
+  count = length(var.public_azs_with_cidr)
 
-  cidr_block              = "10.0.${count.index * 2 + 1}.0/24"
-  vpc_id                  = aws_vpc.dev_vpc.id
-  availability_zone       = var.available_zones[count.index]
+  cidr_block              = values(var.public_azs_with_cidr)[count.index]
+  vpc_id                  = aws_vpc.vpc.id
+  availability_zone       = keys(var.public_azs_with_cidr)[count.index]
   map_public_ip_on_launch = true
 
-  tags = merge(local.common_tags, map("Name", "PublicSubnet-${var.environment}-${element(var.available_zones, count.index)}"))
+  tags = merge(local.common_tags, map("Name", "PublicSubnet-${var.environment}-${element(keys(var.public_azs_with_cidr), count.index)}"))
 }
 
 ######################################################
@@ -97,14 +97,14 @@ resource "aws_subnet" "public" {
 # Each subnet in a different AZ
 ######################################################
 resource "aws_subnet" "private" {
-  count = length(var.available_zones)
+  count = length(var.private_azs_with_cidr)
 
-  cidr_block              = "10.0.${count.index * 2}.0/24"
-  vpc_id                  = aws_vpc.dev_vpc.id
-  availability_zone       = var.available_zones[count.index]
+  cidr_block              = values(var.private_azs_with_cidr)[count.index]
+  vpc_id                  = aws_vpc.vpc.id
+  availability_zone       = keys(var.private_azs_with_cidr)[count.index]
   map_public_ip_on_launch = false
 
-  tags = merge(local.common_tags, map("Name", "PrivateSubnet-${var.environment}-${element(var.available_zones, count.index)}"))
+  tags = merge(local.common_tags, map("Name", "PrivateSubnet-${var.environment}-${element(keys(var.public_azs_with_cidr), count.index)}"))
 }
 
 

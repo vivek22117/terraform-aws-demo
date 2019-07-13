@@ -36,8 +36,8 @@ resource "aws_s3_bucket" "main" {
 
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
-  read_capacity  = 5
-  write_capacity = 5
+  read_capacity  = 2
+  write_capacity = 2
 
   hash_key = "LockID"
 
@@ -93,7 +93,8 @@ resource "aws_s3_bucket" "s3_deploy_bucket" {
 }
 
 resource "aws_iam_policy" "terraform_access_policy" {
-  name = "TerraformAccessPolicy"
+  name = format("%s-%s", var.environment, "TerraformAccessPolicy")
+  path = "/ddsolutions/prod/"
 
   policy = <<EOF
 {
@@ -111,8 +112,8 @@ EOF
 }
 
 resource "aws_iam_role" "terraform_access_role" {
-  name = "TerraformAccessRole"
-  path = "/"
+  name = format("%s-%s", var.environment, "TerraformAccessRole")
+  path = "/ddsolutions/prod/"
 
   assume_role_policy = <<EOF
 {

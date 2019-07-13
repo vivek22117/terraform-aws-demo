@@ -1,8 +1,8 @@
 resource "aws_security_group" "bastion_host_sg" {
-  name = "bastion-sg-${aws_vpc.dev_vpc.id}"
+  name = "bastion-sg-${aws_vpc.vpc.id}"
 
   description = "Allow SSH from owner IP"
-  vpc_id      = aws_vpc.dev_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   egress {
     from_port   = 0

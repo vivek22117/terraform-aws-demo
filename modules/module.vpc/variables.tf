@@ -31,9 +31,14 @@ variable "support_dns" {
   description = "To use private DNS support within the VPC"
 }
 
-variable "available_zones" {
-  type        = "list"
-  description = "Name of regions to be used for infrastructure"
+variable "private_azs_with_cidr" {
+  type        = "map"
+  description = "Name of azs with cird to be used for infrastructure"
+}
+
+variable "public_azs_with_cidr" {
+  type        = "map"
+  description = "Name of azs with cird to be used for infrastructure"
 }
 
 variable "enable_nat_gateway" {
@@ -82,8 +87,8 @@ variable "environment" {
 //Local variables
 locals {
   common_tags = {
-    owner       = "${var.owner}"
-    team        = "${var.team}"
-    environment = "${var.environment}"
+    owner       = var.owner
+    team        = var.team
+    environment = var.environment
   }
 }
