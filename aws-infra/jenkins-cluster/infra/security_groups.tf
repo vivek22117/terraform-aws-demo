@@ -4,10 +4,6 @@ resource "aws_security_group" "jenkins_master_sg" {
   description = "Allow traffic from port 8080 and enable SSH"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
 
-  lifecycle {
-    create_before_destroy = true
-  }
-
   tags = local.common_tags
 }
 

@@ -7,8 +7,9 @@
 # Each NAT gateway requires an Elastic IP.
 ######################################################
 resource "aws_eip" "nat_eip" {
+  depends_on = ["aws_internet_gateway.vpc_igw"]
   vpc   = true
-  count = var.enable_nat_gateway == true ? length(var.public_azs_with_cidr) : 0
+  count = var.enable_nat_gateway == "true" ? 1 : 0
 
   tags = {
     Name = "EIP_${var.environment}_${aws_vpc.vpc.id}_${count.index}"
@@ -18,7 +19,7 @@ resource "aws_eip" "nat_eip" {
 //Create NatGateway and allocate EIP
 resource "aws_nat_gateway" "nat_gateway" {
   depends_on = ["aws_internet_gateway.vpc_igw"]
-  count      = var.enable_nat_gateway == true ? length(var.public_azs_with_cidr) : 0
+  count      = var.enable_nat_gateway == "true" ? 1 : 0
 
   allocation_id = aws_eip.nat_eip.*.id[count.index]
   subnet_id     = aws_subnet.public.*.id[count.index]
@@ -41,11 +42,11 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "private_nat_gateway" {
-  count = var.enable_nat_gateway == true ? length(var.private_azs_with_cidr) : 0
+  count = var.enable_nat_gateway == "true" ? length(var.private_azs_with_cidr) : 0
 
   route_table_id         = aws_route_table.private.*.id[count.index]
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat_gateway.*.id[count.index]
+  nat_gateway_id         = aws_nat_gateway.nat_gateway.*.id[0]
 }
 
 resource "aws_route_table_association" "private_association" {

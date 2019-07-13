@@ -28,7 +28,7 @@ resource "aws_launch_configuration" "jenkins_master" {
 resource "aws_autoscaling_group" "jenkins_master_asg" {
   name = "${aws_launch_configuration.jenkins_master.name}-asg"
 
-  vpc_zone_identifier  = [data.terraform_remote_state.vpc.outputs.private_subnets]
+  vpc_zone_identifier  = data.terraform_remote_state.vpc.outputs.private_subnets
   max_size             = 3
   min_size             = var.environment == "prod" ? 2 : 1
   desired_capacity     = var.environment == "prod" ? 2 : 1
@@ -60,7 +60,7 @@ resource "aws_autoscaling_group" "jenkins_master_asg" {
 }
 
 resource "aws_elb" "jenkins_elb" {
-  subnets                   = [data.terraform_remote_state.vpc.outputs.public_subnets]
+  subnets                   = data.terraform_remote_state.vpc.outputs.public_subnets
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.lb_sg.id]
   internal                  = false

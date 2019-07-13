@@ -42,7 +42,7 @@ resource "aws_autoscaling_group" "jenkins_slaves_asg" {
   max_size         = 3
   min_size         = var.environment == "prod" ? 2 : 1
   desired_capacity = var.environment == "prod" ? 2 : 1
-  vpc_zone_identifier  = [data.terraform_remote_state.vpc.outputs.private_subnets]
+  vpc_zone_identifier  = data.terraform_remote_state.vpc.outputs.private_subnets
   launch_configuration = aws_launch_configuration.jenkins_slave_launch_conf.name
 
   health_check_grace_period = 100
