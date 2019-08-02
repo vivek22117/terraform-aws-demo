@@ -1,5 +1,5 @@
-resource "aws_key_pair" "jenkins_slaves" {
-  key_name   = "jenkins-slaves"
+resource "aws_key_pair" "jenkins_master" {
+  key_name   = "jenkins-key"
   public_key = var.public_key
 }
 
@@ -14,7 +14,7 @@ resource "aws_launch_configuration" "jenkins_master" {
   image_id             = data.aws_ami.jenkins-master-ami.id
   instance_type        = var.environment == "dev" ? "t2.micro" : "t2.small"
   iam_instance_profile = aws_iam_instance_profile.jenkins_profile.id
-  key_name             = aws_key_pair.jenkins_slaves.key_name
+  key_name             = aws_key_pair.jenkins_master.key_name
   security_groups      = [aws_security_group.jenkins_master_sg.id]
 
   associate_public_ip_address = false

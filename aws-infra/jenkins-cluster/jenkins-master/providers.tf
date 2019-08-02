@@ -20,7 +20,7 @@ terraform {
     profile        = "doubledigit"
     bucket         = "teamconcept-tfstate-dev-us-east-1"
     dynamodb_table = "teamconcept-tfstate-dev-us-east-1"
-    key            = "state/dev/jenkins-cluster/terraform.tfstate"
+    key            = "state/dev/jenkins-master-cluster/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = "true"
   }

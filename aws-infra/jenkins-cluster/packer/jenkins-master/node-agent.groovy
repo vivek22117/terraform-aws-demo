@@ -4,7 +4,7 @@ import com.cloudbees.plugins.credentials.common.*
 import com.cloudbees.plugins.credentials.domains.*
 import com.cloudbees.plugins.credentials.impl.*
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
-import hudson.plugins.sshslaves.*;
+import hudson.plugins.sshslaves.*
 
 println "--> creating SSH credentials"
 
@@ -15,7 +15,7 @@ privateKey = new File('/tmp/id_rsa').getText('UTF-8')
 
 slavesPrivateKey = new BasicSSHUserPrivateKey(
 CredentialsScope.GLOBAL,
-"jenkins-slaves",
+"jenkins-key",
 "ec2-user",
 new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey),
 "",

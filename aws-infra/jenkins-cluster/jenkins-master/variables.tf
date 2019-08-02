@@ -14,17 +14,6 @@ variable "environment" {
   description = "AWS Profile name for credentials"
 }
 
-variable "jenkins_username" {
-  description = "Jenkins username"
-}
-
-variable "jenkins_password" {
-  description = "Jenkins password"
-}
-
-variable "jenkins_credentials_id" {
-  description = "Slaves SSH ID"
-}
 
 //Default Variables
 variable "default_region" {

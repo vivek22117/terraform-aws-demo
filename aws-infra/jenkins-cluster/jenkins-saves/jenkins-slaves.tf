@@ -3,7 +3,7 @@ data "template_file" "user_data_slave" {
   template = file("scripts/join-cluster.tpl")
 
   vars = {
-    jenkins_url            = "http://${aws_elb.jenkins_elb.dns_name}"
+    jenkins_url            = "http://${data.terraform_remote_state.jenkins-master.outputs.jenkins_elb_dns}"
     jenkins_username       = var.jenkins_username
     jenkins_password       = var.jenkins_password
     jenkins_credentials_id = var.jenkins_credentials_id
@@ -17,11 +17,11 @@ resource "aws_launch_configuration" "jenkins_slave_launch_conf" {
 
   image_id        = data.aws_ami.jenkins-slave-ami.id
   instance_type   = var.environment == "prod" ? "t2.small" : "t2.micro"
-  key_name        = aws_key_pair.jenkins_slaves.key_name
+  key_name        = data.terraform_remote_state.jenkins-master.outputs.jenkins_key
   security_groups = [aws_security_group.jenkins_slaves_sg.id]
 
   user_data                   = data.template_file.user_data_slave.rendered
-  iam_instance_profile        = aws_iam_instance_profile.jenkins_profile.arn
+  iam_instance_profile        = data.terraform_remote_state.jenkins-master.outputs.jenkins_profile
   associate_public_ip_address = false
 
   root_block_device {
@@ -47,8 +47,6 @@ resource "aws_autoscaling_group" "jenkins_slaves_asg" {
 
   health_check_grace_period = 100
   health_check_type         = "EC2"
-
-  //depends_on = ["aws_instance.jenkins_master", "aws_elb.jenkins_elb"]
 
   lifecycle {
     create_before_destroy = true
