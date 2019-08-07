@@ -22,11 +22,12 @@ yum install -y git
 echo "Setup SSH key"
 mkdir /var/lib/jenkins/.ssh
 touch /var/lib/jenkins/.ssh/known_hosts
+chown -R jenkins:jenkins /var/lib/jenkins/.ssh
 chmod 700 /var/lib/jenkins/.ssh
 cp /tmp/id_rsa /var/lib/jenkins/.ssh/id_rsa && chown jenkins:jenkins /tmp/id_rsa
 mv /tmp/id_rsa.pub /var/lib/jenkins/.ssh/id_rsa.pub
-chown -R jenkins:jenkins /var/lib/jenkins/.ssh
 chmod 600 /var/lib/jenkins/.ssh/id_rsa /var/lib/jenkins/.ssh/id_rsa.pub
+
 
 echo "Configure Jenkins"
 mkdir -p /var/lib/jenkins/init.groovy.d

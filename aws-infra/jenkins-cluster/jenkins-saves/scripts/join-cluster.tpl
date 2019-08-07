@@ -6,25 +6,29 @@ JENKINS_PASSWORD="${jenkins_password}"
 ENVIRONMENT = "${environment}"
 TOKEN=$(curl -u $JENKINS_USERNAME:$JENKINS_PASSWORD ''$JENKINS_URL'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
 INSTANCE_HOST=$(curl -s 169.254.169.254/latest/meta-data/local-hostname)
-INSTANCE_NAME = "'$INSTANCE_HOST'-'$ENVIRONMENT'"
 INSTANCE_IP=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
 JENKINS_CREDENTIALS_ID="${jenkins_credentials_id}"
 
 sleep 60
 
 curl -v -u $JENKINS_USERNAME:$JENKINS_PASSWORD -H "$TOKEN" -d 'script=
-import hudson.model.Node.Mode
-import hudson.slaves.*
-import jenkins.model.Jenkins
-import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy
+import hudson.model.Slave
 import hudson.plugins.sshslaves.SSHLauncher
-DumbSlave dumb = new DumbSlave("'$INSTANCE_HOST'",
-"'$INSTANCE_HOST'",
-"/home/ec2-user",
-"2",
-Mode.NORMAL,
-"slaves",
-new SSHLauncher("'$INSTANCE_IP'", 22, SSHLauncher.lookupSystemCredentials("'$JENKINS_CREDENTIALS_ID'"), "", null, null, "", "", 60, 3, 15, new NonVerifyingKeyVerificationStrategy()),
-RetentionStrategy.INSTANCE)
-Jenkins.instance.addNode(dumb)
+import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy
+import hudson.slaves.ComputerLauncher
+import hudson.slaves.DumbSlave
+import hudson.slaves.RetentionStrategy
+
+ComputerLauncher launcher = new SSHLauncher("'$INSTANCE_IP'", 22,
+        "'$JENKINS_CREDENTIALS_ID'","", null, null, "", 60, 3, 15,
+         new NonVerifyingKeyVerificationStrategy())
+
+Slave slave = new DumbSlave("'$INSTANCE_IP'", "/home/ec2-user", launcher)
+
+slave.nodeDescription = "Jenkins slave for devl environment"
+slave.numExecutors = 2
+slave.labelString = "'$ENVIRONMENT'"
+slave.mode = Node.Mode.NORMAL
+slave.retentionStrategy = new RetentionStrategy.Always()
+Jenkins.instance.addNode(slave)
 ' $JENKINS_URL/script
