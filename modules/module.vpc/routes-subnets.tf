@@ -12,7 +12,7 @@ resource "aws_eip" "nat_eip" {
   count = var.enable_nat_gateway == "true" ? 1 : 0
 
   tags = {
-    Name = "EIP_${var.environment}_${aws_vpc.vpc.id}_${count.index}"
+    Name = "eip-${var.environment}-${aws_vpc.vpc.id}-${count.index}"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   subnet_id     = aws_subnet.public.*.id[count.index]
 
   tags = {
-    Name = "NAT_${var.environment}_${aws_vpc.vpc.id}_${count.index}"
+    Name = "nat-${var.environment}-${aws_vpc.vpc.id}-${count.index}"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
   count  = length(var.private_azs_with_cidr)
 
-  tags = merge(local.common_tags, map("Name", "Private_route_${var.environment}_${aws_vpc.vpc.id}_${count.index}"))
+  tags = merge(local.common_tags, map("Name", "private-route-${var.environment}-${aws_vpc.vpc.id}-${count.index}"))
 }
 
 resource "aws_route" "private_nat_gateway" {
@@ -68,7 +68,7 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.vpc_igw.id
   }
 
-  tags = merge(local.common_tags, map("Name", "Public_route_${var.environment}_${aws_vpc.vpc.id}"))
+  tags = merge(local.common_tags, map("Name", "public-route-${var.environment}-${aws_vpc.vpc.id}"))
 }
 
 resource "aws_route_table_association" "public_association" {
@@ -90,7 +90,7 @@ resource "aws_subnet" "public" {
   availability_zone       = keys(var.public_azs_with_cidr)[count.index]
   map_public_ip_on_launch = true
 
-  tags = merge(local.common_tags, map("Name", "PublicSubnet-${var.environment}-${element(keys(var.public_azs_with_cidr), count.index)}"))
+  tags = merge(local.common_tags, map("Name", "publicSubnet-${var.environment}-${element(keys(var.public_azs_with_cidr), count.index)}"))
 }
 
 ######################################################
@@ -105,7 +105,7 @@ resource "aws_subnet" "private" {
   availability_zone       = keys(var.private_azs_with_cidr)[count.index]
   map_public_ip_on_launch = false
 
-  tags = merge(local.common_tags, map("Name", "PrivateSubnet-${var.environment}-${element(keys(var.public_azs_with_cidr), count.index)}"))
+  tags = merge(local.common_tags, map("Name", "privateSubnet-${var.environment}-${element(keys(var.public_azs_with_cidr), count.index)}"))
 }
 
 

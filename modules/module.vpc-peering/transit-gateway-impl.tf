@@ -10,6 +10,46 @@ resource "aws_ec2_transit_gateway" "ddsolutions_tgw" {
   tags = local.common_tags
 }
 
+# Route Tables Routes
+## Usually unecessary to explicitly create a Route Table in Terraform
+## since AWS automatically creates and assigns a 'Main Route Table'
+## whenever a VPC is created. However, in a Transit Gateway scenario,
+## Route Tables are explicitly created so an extra route to the
+## Transit Gateway could be defined
+
+resource "aws_route" "vpc_dev_rt_route" {
+  depends_on = ["aws_ec2_transit_gateway.ddsolutions_tgw"]
+
+  route_table_id = data.terraform_remote_state.vpc_dev.outputs.vpc_main_rt
+  destination_cidr_block = "10.0.0.8"
+  transit_gateway_id = aws_ec2_transit_gateway.ddsolutions_tgw.id
+}
+
+resource "aws_route" "vpc_test_rt_route" {
+  depends_on = ["aws_ec2_transit_gateway.ddsolutions_tgw"]
+
+  route_table_id = data.terraform_remote_state.vpc_test.outputs.vpc_main_rt
+  destination_cidr_block = "10.0.0.8"
+  transit_gateway_id = aws_ec2_transit_gateway.ddsolutions_tgw.id
+}
+
+resource "aws_route" "vpc_shared_rt_route" {
+  depends_on = ["aws_ec2_transit_gateway.ddsolutions_tgw"]
+
+  route_table_id = data.terraform_remote_state.vpc_shared.outputs.vpc_main_rt
+  destination_cidr_block = "10.0.0.8"
+  transit_gateway_id = aws_ec2_transit_gateway.ddsolutions_tgw.id
+}
+
+resource "aws_route" "vpc_prod_rt_route" {
+  depends_on = ["aws_ec2_transit_gateway.ddsolutions_tgw"]
+
+  route_table_id = data.terraform_remote_state.vpc_prod.outputs.vpc_main_rt
+  destination_cidr_block = "10.0.0.8"
+  transit_gateway_id = aws_ec2_transit_gateway.ddsolutions_tgw.id
+}
+
+
 ###########################
 # VPC attachment          #
 ###########################
@@ -168,7 +208,8 @@ resource "aws_ec2_transit_gateway_route_table_association" "tgw_rt_prod_vpc_asso
 }
 
 # Route Tables Propagations
-## This section defines which VPCs will be routed from each Route Table created in the Transit Gateway
+# This section defines which VPCs will be routed from each Route Table
+# created in the Transit Gateway
 
 resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_dev_to_dev_vpc" {
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_dev.id
@@ -185,21 +226,6 @@ resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_dev_to_shared
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_dev_rt
 }
 
-resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_shared_to_dev_vpc" {
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_dev.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_shared_rt.id
-}
-
-resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_shared_to_test_vpc" {
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_test.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_shared_rt.id
-}
-
-resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_shared_to_prod_vpc" {
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_prod.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_shared_rt.id
-}
-
 resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_test_to_test_vpc" {
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_test.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_test_rt.id
@@ -213,6 +239,21 @@ resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_test_to_share
 resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_test_to_dev_vpc" {
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_dev.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_test_rt.id
+}
+
+resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_shared_to_dev_vpc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_dev.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_shared_rt.id
+}
+
+resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_shared_to_test_vpc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_test.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_shared_rt.id
+}
+
+resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_shared_to_prod_vpc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_att_vpc_prod.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_shared_rt.id
 }
 
 resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rt_prod_to_shared_vpc" {

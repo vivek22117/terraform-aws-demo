@@ -26,3 +26,7 @@ output "vpc_cidr_block" {
   value = aws_vpc.vpc.cidr_block
 }
 
+output "vpc_main_rt" {
+  value = aws_route_table.vpc_main_rt.id
+}
+

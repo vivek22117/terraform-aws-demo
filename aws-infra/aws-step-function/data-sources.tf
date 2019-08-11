@@ -14,10 +14,11 @@ resource "local_file" "rendered_api_lambda" {
 
 //ZIP file for Step Function Lambda
 data "archive_file" "lambda_for_sf" {
+  depends_on  = [local_file.rendered_api_lambda]
+
   output_path = "lambda-function/api-handler-lambda.zip"
   source_file = "${path.module}/lambda-function/api-handler-lambda.py"
   type        = "zip"
-  depends_on  = [local_file.rendered_api_lambda]
 }
 
 data "template_file" "website_formlogic" {
@@ -71,7 +72,7 @@ data "template_file" "cft_sns_stack" {
         "{ \"Endpoint\": \"%s\", \"Protocol\": \"%s\"  }",
         var.mobile_numbers,
         var.protocol,
-      ),
+      )
     )
   }
 }
