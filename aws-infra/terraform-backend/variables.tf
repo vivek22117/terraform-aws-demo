@@ -24,6 +24,12 @@ variable "artifactory_bucket_prefix" {
   default     = "teamconcept-deploy"
 }
 
+variable "dataLake_bucket_prefix" {
+  type        = string
+  description = "Prefind for Artifactory Bucket"
+  default     = "teamconcept-data"
+}
+
 variable "default_region" {
   type    = string
   default = "us-east-1"
