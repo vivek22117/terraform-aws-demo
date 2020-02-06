@@ -5,6 +5,10 @@ provider "aws" {
   version = ">=2.22.0"
 }
 
+provider "template" {
+  version = ">=2"
+}
+
 terraform {
   required_version = ">= 0.12"
 
