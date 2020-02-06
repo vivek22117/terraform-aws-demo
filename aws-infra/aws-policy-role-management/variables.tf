@@ -5,54 +5,43 @@ variable "profile" {
 }
 
 variable "default_region" {
-  type    = string
+  type        = string
   description = "AWS region to provision"
 }
 
 variable "environment" {
-  type    = string
+  type        = string
   description = "Development environment"
 }
 
-#####==================BackendConfig Variables====================#####
-variable "tf_s3_bucket_prefix" {
+#####==================Configration Variables===============#####
+variable "policy_name" {
   type        = string
-  description = "Prefix for s3 bucket"
+  description = "Name of the IAM policy"
 }
 
-variable "dyanamoDB_prefix" {
+variable "role_name" {
   type        = string
-  description = "Pefix for dynamoDB Table"
+  description = "Name of the IAM role"
 }
-
-variable "artifactory_bucket_prefix" {
-  type        = string
-  description = "Prefind for Artifactory Bucket"
-}
-
-variable "dataLake_bucket_prefix" {
-  type        = string
-  description = "Bucket to store data"
-}
-
 
 #####=============================Local Variables=====================#####
 variable "component" {
-  type = string
+  type        = string
   description = "Name for the component or project for with infra is provisioned"
 }
 
 variable "team" {
-  type = string
+  type        = string
   description = "Project owner mailId / owner"
 }
 
 #####==============Local variables======================#####
 locals {
   common_tags = {
-    team  = "DoubleDigitTeam"
+    team        = "DoubleDigitTeam"
     environment = var.environment
-    component = var.component
+    component   = var.component
   }
 }
 

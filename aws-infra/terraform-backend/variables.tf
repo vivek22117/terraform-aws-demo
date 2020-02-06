@@ -1,50 +1,58 @@
-//Global Variables
+#####===================Global Variables====================#####
 variable "profile" {
   type        = string
   description = "AWS Profile name for credentials"
 }
 
+variable "default_region" {
+  type    = string
+  description = "AWS region to provision"
+}
 
-//Default Variables
-variable "s3_bucket_prefix" {
+variable "environment" {
+  type    = string
+  description = "Development environment"
+}
+
+#####==================BackendConfig Variables====================#####
+variable "tf_s3_bucket_prefix" {
   type        = string
-  default     = "teamconcept-tfstate"
   description = "Prefix for s3 bucket"
 }
 
 variable "dyanamoDB_prefix" {
   type        = string
-  default     = "teamconcept-tfstate"
   description = "Pefix for dynamoDB Table"
 }
 
 variable "artifactory_bucket_prefix" {
   type        = string
   description = "Prefind for Artifactory Bucket"
-  default     = "teamconcept-deploy"
 }
 
 variable "dataLake_bucket_prefix" {
   type        = string
-  description = "Prefind for Artifactory Bucket"
-  default     = "teamconcept-data"
+  description = "Bucket to store data"
 }
 
-variable "default_region" {
-  type    = string
-  default = "us-east-1"
+
+#####=============================Local Variables=====================#####
+variable "component" {
+  type = string
+  description = "Name for the component or project for with infra is provisioned"
 }
 
-variable "environment" {
-  type    = string
-  default = "dev"
+variable "team" {
+  type = string
+  description = "Project owner mailId / owner"
 }
 
-//Local variables
+#####==============Local variables======================#####
 locals {
   common_tags = {
-    owner = "Vivek"
-    team  = "TeamConcept"
+    team  = "DoubleDigitTeam"
+    environment = var.environment
+    component = var.component
   }
 }
 

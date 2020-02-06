@@ -16,7 +16,6 @@ resource "aws_lambda_function" "email_reminder" {
       verified_email = var.verified_email
     }
   }
-
   tags = local.common_tags
 }
 

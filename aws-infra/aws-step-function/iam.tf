@@ -1,6 +1,6 @@
 #Define Policy and Role for Step Function
 resource "aws_iam_role" "sf_access_role" {
-  name = "StepFunctionAccessRole"
+  name = "StepFunctionAccessRoleForReminderApp"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -12,8 +12,7 @@ resource "aws_iam_role" "sf_access_role" {
             "Principal": {
                "Service": "states.${var.default_region}.amazonaws.com"
             },
-            "Effect": "Allow",
-            "Sid": ""
+            "Effect": "Allow"
         }
     ]
 }
@@ -22,7 +21,7 @@ EOF
 }
 
 resource "aws_iam_policy" "sf_access_policy" {
-  name = "StepFunctionAccessPolicy"
+  name = "StepFunctionAccessPolicyForReminderApp"
   description = "Policy to access AWS Resources"
   path = "/"
 

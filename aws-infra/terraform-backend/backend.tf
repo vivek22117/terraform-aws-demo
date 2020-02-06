@@ -1,6 +1,6 @@
 #####=====================Terraform tfstate backend S3===================#####
 resource "aws_s3_bucket" "tf_state_bucket" {
-  bucket = "${var.s3_bucket_prefix}-${var.environment}-${var.default_region}"
+  bucket = "${var.tf_s3_bucket_prefix}-${var.environment}-${var.default_region}"
   acl    = "private"
   region = var.default_region
 
@@ -32,10 +32,10 @@ resource "aws_s3_bucket" "tf_state_bucket" {
     }
   }
 
-  tags = merge(local.common_tags, map("environment", "var.environment"))
+  tags = merge(local.common_tags, map("name", "tf-state-bucket-${var.environment}"))
 }
 
-#####=========================DynamoDB Table for tf state lock=====================#####
+#####=========================DynamoDB Table for tfstate state lock=====================#####
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
   read_capacity  = 5
@@ -52,13 +52,11 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
     prevent_destroy = true
   }
 
-  tags = {
-    Name = "DynamoDb Terraform state lock Table"
-  }
+  tags = merge(local.common_tags, map("name", "tf-state-db-${var.environment}"))
 }
 
 #####==================Artifactory Bucket for Dev Environment=====================#####
-resource "aws_s3_bucket" "s3_deploy_bucket" {
+resource "aws_s3_bucket" "s3_artifactory_bucket" {
   bucket = "${var.artifactory_bucket_prefix}-${var.environment}-${var.default_region}"
   acl    = "private"
   region = var.default_region
@@ -91,7 +89,7 @@ resource "aws_s3_bucket" "s3_deploy_bucket" {
     }
   }
 
-  tags = merge(local.common_tags, map("environment", "var.environment"))
+  tags = merge(local.common_tags, map("name", "aritifactory-bucket-${var.environment}"))
 }
 
 
@@ -143,50 +141,7 @@ resource "aws_s3_bucket" "s3_dataLake_bucket" {
     }
   }
 
-  tags = merge(local.common_tags, map("environment", "var.environment"))
+  tags = merge(local.common_tags, map("name", "datalake-bucket-${var.environment}"))
 }
 
-resource "aws_iam_policy" "terraform_access_policy" {
-  name = "TerraformAccessPolicy"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": "*",
-        "Resource": "*"
-      }
-    ]
-}
-EOF
-
-}
-
-resource "aws_iam_role" "terraform_access_role" {
-  name = "TerraformAccessRole"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "Service": "ec2.amazonaws.com"
-            },
-            "Effect": "Allow"
-        }
-    ]
-}
-EOF
-
-}
-
-resource "aws_iam_role_policy_attachment" "terraform_access" {
-policy_arn = aws_iam_policy.terraform_access_policy.arn
-role       = aws_iam_role.terraform_access_role.name
-}
 
