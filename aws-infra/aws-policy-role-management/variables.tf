@@ -20,10 +20,31 @@ variable "policy_name" {
   description = "Name of the IAM policy"
 }
 
+variable "policy_path" {
+  type = string
+  description = "Path for policy document"
+}
+
 variable "role_name" {
   type        = string
   description = "Name of the IAM role"
 }
+
+variable "role_path" {
+  type = string
+  description = "Path for role document"
+}
+
+variable "policy_vars" {
+  type = map(string)
+  description = "Variables to populate policy document"
+}
+
+variable "role_vars" {
+  type = map(string)
+  description = "Variables to populate role document"
+}
+
 
 #####=============================Local Variables=====================#####
 variable "component" {
@@ -39,7 +60,7 @@ variable "team" {
 #####==============Local variables======================#####
 locals {
   common_tags = {
-    team        = "DoubleDigitTeam"
+    team        = var.team
     environment = var.environment
     component   = var.component
   }
