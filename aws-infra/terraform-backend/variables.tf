@@ -5,12 +5,12 @@ variable "profile" {
 }
 
 variable "default_region" {
-  type    = string
+  type        = string
   description = "AWS region to provision"
 }
 
 variable "environment" {
-  type    = string
+  type        = string
   description = "Development environment"
 }
 
@@ -38,21 +38,21 @@ variable "dataLake_bucket_prefix" {
 
 #####=============================Local Variables=====================#####
 variable "component" {
-  type = string
+  type        = string
   description = "Name for the component or project for with infra is provisioned"
 }
 
 variable "team" {
-  type = string
+  type        = string
   description = "Project owner mailId / owner"
 }
 
 #####==============Local variables======================#####
 locals {
   common_tags = {
-    team  = "DoubleDigitTeam"
+    team        = "DoubleDigitTeam"
     environment = var.environment
-    component = var.component
+    component   = var.component
   }
 }
 

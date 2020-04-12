@@ -38,8 +38,8 @@ resource "aws_s3_bucket" "tf_state_bucket" {
 #####=========================DynamoDB Table for tfstate state lock=====================#####
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   name           = "${var.dyanamoDB_prefix}-${var.environment}-${var.default_region}"
-  read_capacity  = 5
-  write_capacity = 5
+  read_capacity  = 2
+  write_capacity = 2
 
   hash_key = "LockID"
 
@@ -102,7 +102,7 @@ resource "aws_s3_bucket" "s3_dataLake_bucket" {
   force_destroy = false
 
   lifecycle {
-    prevent_destroy = "true"                            // Terraform meta parameter
+    prevent_destroy = "true" // Terraform meta parameter
   }
 
   server_side_encryption_configuration {
@@ -124,7 +124,7 @@ resource "aws_s3_bucket" "s3_dataLake_bucket" {
 
     transition {
       days          = 30
-      storage_class = "ONEZONE_IA"             #"STANDARD_IA"
+      storage_class = "ONEZONE_IA" #"STANDARD_IA"
     }
 
     transition {

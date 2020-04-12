@@ -35,7 +35,7 @@ document.getElementById('smsButton').addEventListener('click', function(e) {
 });
 
 function sendData (e, pref) {
-    // Prevent the page reloading and clear exisiting notifications
+    // Prevent the page reloading and clear existing notifications
     e.preventDefault()
     clearNotifications()
     // Prepare the appropriate HTTP request to the API with fetch

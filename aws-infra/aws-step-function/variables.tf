@@ -6,7 +6,7 @@ variable "profile" {
 
 variable "environment" {
   type        = string
-  description = "AWS Profile name for credentials"
+  description = "Environment to be configured 'dev', 'qa', 'prod'"
 }
 
 variable "step-function-name" {
