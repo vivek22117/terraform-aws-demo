@@ -22,7 +22,7 @@ output "dynamoDB_name" {
   value = aws_dynamodb_table.dynamodb-terraform-state-lock.name
 }
 
-output "aritfactory_bucket_name" {
+output "artifactory_bucket_name" {
   value = aws_s3_bucket.s3_artifactory_bucket.id
 }
 
